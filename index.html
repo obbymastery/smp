@@ -11,16 +11,36 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <canvas id="hexgrid" aria-hidden="true"></canvas>
+  <canvas id="fog" aria-hidden="true"></canvas>
   <canvas id="embers" aria-hidden="true"></canvas>
+  <canvas id="lightning" aria-hidden="true"></canvas>
+  <canvas id="seep" aria-hidden="true"></canvas>
+  <canvas id="shockwave" aria-hidden="true"></canvas>
   <canvas id="deadPixels" aria-hidden="true"></canvas>
   <canvas id="necroStorm" aria-hidden="true"></canvas>
-  <div class="hidden-lore-layer" aria-hidden="true">
-    <span class="lore-fragment" data-lore="Not attention. Not wealth. Control." style="--x: 14%; --y: 22%; --d: 1.4s;"></span>
-    <span class="lore-fragment" data-lore="The strongest energy came from the living." style="--x: 72%; --y: 31%; --d: 2.1s;"></span>
-    <span class="lore-fragment" data-lore="Night felt longer when he was active." style="--x: 26%; --y: 63%; --d: 2.8s;"></span>
-    <span class="lore-fragment" data-lore="Not destroyed. Just contained." style="--x: 66%; --y: 74%; --d: 3.3s;"></span>
-    <span class="lore-fragment" data-lore="The orb is active again." style="--x: 48%; --y: 54%; --d: 1.9s;"></span>
+  <canvas id="orbCanvas" aria-hidden="true"></canvas>
+  <canvas id="vizCanvas" aria-hidden="true"></canvas>
+
+  <div class="overrun-overlay" id="overrunOverlay" aria-hidden="true">
+    <p class="overrun-code">OVERRUN PROTOCOL [ACTIVE]</p>
   </div>
+  <div class="cursor-trail" id="cursorTrail" aria-hidden="true"></div>
+  <div class="aurora-layer" aria-hidden="true"></div>
+  <div class="vignette-layer" aria-hidden="true"></div>
+
+  <div class="hidden-lore-layer" aria-hidden="true">
+    <span class="lore-fragment" data-lore="Not attention. Not wealth. Control." style="--x: 14%; --y: 22%;"></span>
+    <span class="lore-fragment" data-lore="The strongest energy came from the living." style="--x: 72%; --y: 31%;"></span>
+    <span class="lore-fragment" data-lore="Night felt longer when he was active." style="--x: 26%; --y: 63%;"></span>
+    <span class="lore-fragment" data-lore="Not destroyed. Just contained." style="--x: 66%; --y: 74%;"></span>
+    <span class="lore-fragment" data-lore="The orb is active again." style="--x: 48%; --y: 54%;"></span>
+    <span class="lore-fragment" data-lore="Storms seemed to follow him." style="--x: 86%; --y: 56%;"></span>
+    <span class="lore-fragment" data-lore="The seal is weaker than it was." style="--x: 36%; --y: 18%;"></span>
+    <span class="lore-fragment" data-lore="He wanted control. It wanted more." style="--x: 58%; --y: 82%;"></span>
+  </div>
+
   <div class="error-overlay" id="errorOverlay" aria-hidden="true">
     <div class="error-overlay-inner">
       <p class="error-code">ACCESS ERROR [09]</p>
@@ -28,45 +48,102 @@
       <p>Visual archive remains restricted.</p>
     </div>
   </div>
+  <div class="zombie-breach-overlay" id="zombieBreachOverlay" aria-hidden="true">
+    <div class="zombie-breach-inner">
+      <p class="zombie-breach-code">UNDEAD SIGNAL OVERRUN [13]</p>
+      <p class="zombie-breach-line" id="zombieBreachLine">Grave-channel activity has entered the event feed.</p>
+    </div>
+  </div>
+  <div class="zombie-breach-swarm" id="zombieBreachSwarm" aria-hidden="true"></div>
+  <div class="audio-dock" id="audioDock">
+    <button class="btn btn-ghost" id="musicToggleBtn" type="button"><span class="btn-text">Music: Off</span><span class="btn-arrow" aria-hidden="true">-></span></button>
+    <button class="btn btn-ghost" id="musicNextBtn" type="button"><span class="btn-text">Next Track</span><span class="btn-arrow" aria-hidden="true">-></span></button>
+    <p class="hero-music-status" id="musicNow">Music ready: Infinite Amethyst / Otherside / Pigstep / Mice On Venus / Creator</p>
+  </div>
 
   <section class="hero" id="top">
     <div class="hero-stone" aria-hidden="true"></div>
-    <div class="hero-content reveal">
-      <p class="server-label">PARADOX SMP</p>
-      <h1 id="heroTitle">Power Is Never Free.</h1>
-      <p class="hero-sub" id="heroSub">A survival world where control is taken, tested, and remembered.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#join">Join</a>
-        <a class="btn btn-ghost" href="#artifact">Watch the Event</a>
+    <div class="hero-viz" aria-hidden="true" id="heroViz"></div>
+    <div class="hero-shell">
+      <div class="hero-content reveal">
+        <p class="server-label"><span class="label-bracket" aria-hidden="true">//</span> PARADOX SMP <span class="label-bracket" aria-hidden="true">//</span></p>
+        <h1 id="heroTitle"><span class="word-reveal">Power</span> <span class="word-reveal">Is</span> <span class="word-reveal">Never</span> <span class="word-reveal">Free.</span></h1>
+        <p class="hero-sub" id="heroSub">A survival world where control is taken, tested, and remembered.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#join"><span class="btn-text">Join</span><span class="btn-arrow" aria-hidden="true">-></span></a>
+          <a class="btn btn-ghost" href="#artifact"><span class="btn-text">Watch the Event</span><span class="btn-arrow" aria-hidden="true">-></span></a>
+        </div>
       </div>
+      <aside class="hero-art reveal" aria-hidden="true">
+        <div class="art-frame">
+          <div class="hero-illustration" role="presentation">
+            <div class="signal-grid" aria-hidden="true">
+              <span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span>
+              <span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span>
+              <span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span>
+            </div>
+            <div class="signal-wave" aria-hidden="true">
+              <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+              <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+              <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+            </div>
+            <div class="signal-core" aria-hidden="true"></div>
+          </div>
+          <p class="art-caption">Signal Array // No visual archive assets loaded</p>
+        </div>
+        <div class="art-strip">
+          <div class="art-mini">
+            <div class="art-thumb" aria-hidden="true"></div>
+            <p>Audio Channel A</p>
+          </div>
+          <div class="art-mini">
+            <div class="art-thumb" aria-hidden="true"></div>
+            <p>Audio Channel B</p>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 
   <main>
     <section class="world section reveal tilt" id="world">
-      <h2>The World</h2>
+      <span class="section-corner tl" aria-hidden="true"></span>
+      <span class="section-corner br" aria-hidden="true"></span>
+      <span class="section-scan" aria-hidden="true"></span>
+      <h2><span class="h2-rule" aria-hidden="true"></span>The World</h2>
       <p>This is a survival server where power is earned and lost. Major events permanently affect the world. Nothing resets.</p>
     </section>
 
     <section class="state section reveal tilt" id="state">
-      <h2>Current State of the World</h2>
+      <span class="section-corner tl" aria-hidden="true"></span>
+      <span class="section-corner br" aria-hidden="true"></span>
+      <span class="section-scan" aria-hidden="true"></span>
+      <h2><span class="h2-rule" aria-hidden="true"></span>Current State of the World</h2>
       <div class="state-panel">
-        <p class="state-row"><span>World Stability</span><strong id="worldStability">81%</strong></p>
-        <p class="state-row"><span>Undead Activity</span><strong id="undeadActivity">Low</strong></p>
-        <p class="state-row"><span>Artifact Energy</span><strong id="artifactEnergy">Increasing</strong></p>
+        <p class="state-row state-row--stability"><span class="state-key"><span class="state-dot" aria-hidden="true"></span>World Stability</span><strong id="worldStability">81%</strong></p>
+        <p class="state-row state-row--undead"><span class="state-key"><span class="state-dot" aria-hidden="true"></span>Undead Activity</span><strong id="undeadActivity">Low</strong></p>
+        <p class="state-row state-row--artifact"><span class="state-key"><span class="state-dot" aria-hidden="true"></span>Artifact Energy</span><strong id="artifactEnergy">Increasing</strong></p>
       </div>
       <div class="stability-meter" aria-label="World stability meter">
-        <span id="stabilityBar"></span>
+        <div class="stability-segments" id="stabilityBar"></div>
       </div>
       <p class="state-note">Countdown to event start (America/Chicago): <strong id="eventCountdown">--d --h --m --s</strong></p>
       <p class="state-note">World stability decreases until 0% on Sunday, March 1, 2026 at 6:00 PM CT.</p>
+      <p class="state-note">Drain Rate: <strong id="stabilityRate">--/hr</strong></p>
+      <div class="telemetry" id="telemetry">
+        <span class="telemetry-label">Live Telemetry</span>
+        <p id="telemetryText">Calibrating world diagnostics...</p>
+      </div>
     </section>
 
     <section class="artifact section reveal" id="artifact">
+      <span class="section-corner tl" aria-hidden="true"></span>
+      <span class="section-corner br" aria-hidden="true"></span>
+      <span class="section-scan" aria-hidden="true"></span>
       <div class="artifact-card tilt" id="artifactCard">
-        <h2>Containment Protocol</h2>
+        <h2><span class="h2-rule" aria-hidden="true"></span>Containment Protocol</h2>
         <p class="excerpt">The artifact archive is restricted. Unauthorized visual access is blocked by faction order.</p>
-        <button class="btn btn-primary small" id="revealArtifactBtn" type="button">Press to Reveal</button>
+        <button class="btn btn-primary small" id="revealArtifactBtn" type="button"><span class="btn-text">Press to Reveal</span><span class="btn-arrow" aria-hidden="true">-></span></button>
 
         <div class="containment-panel" id="containmentPanel" hidden>
           <h3>The Containment Notice</h3>
@@ -78,15 +155,19 @@
     </section>
 
     <section class="events section reveal" id="events">
-      <h2>Events</h2>
+      <span class="section-corner tl" aria-hidden="true"></span>
+      <span class="section-corner br" aria-hidden="true"></span>
+      <span class="section-scan" aria-hidden="true"></span>
+      <h2><span class="h2-rule" aria-hidden="true"></span>Events</h2>
       <div class="event-feed">
         <article class="panel event-panel tilt">
           <p class="event-type">Necromancer Event</p>
           <h3 class="event-title">?</h3>
           <p class="line-item">Status: Pending Trigger</p>
           <p class="line-item">Reward Tier: Unknown</p>
+          <p class="line-item">Recovered Fragments: <span id="archiveCount">0</span>/5</p>
           <div class="event-actions">
-            <button class="btn btn-ghost small" id="eventMoreInfoBtn" type="button">More Info</button>
+            <button class="btn btn-ghost small" id="eventMoreInfoBtn" type="button"><span class="btn-text">More Info</span><span class="btn-arrow" aria-hidden="true">-></span></button>
             <div class="necro-sigil" id="necroSigil" aria-hidden="true"></div>
           </div>
           <div class="zombie-error-panel" id="zombieErrorPanel" hidden>
@@ -100,20 +181,26 @@
     </section>
 
     <section class="join section reveal" id="join">
-      <h2>Join</h2>
+      <span class="section-corner tl" aria-hidden="true"></span>
+      <span class="section-corner br" aria-hidden="true"></span>
+      <span class="section-scan" aria-hidden="true"></span>
+      <h2><span class="h2-rule" aria-hidden="true"></span>Join</h2>
       <div class="join-grid">
         <article class="panel tilt">
+          <span class="panel-corner tl" aria-hidden="true"></span>
           <h3>Server</h3>
           <p class="line-item">IP: <span id="serverIp">152.70.137.25</span></p>
           <p class="line-item">Version: Java 1.21.x</p>
-          <button class="btn btn-primary small" id="copyIpBtn" type="button">Copy IP</button>
+          <button class="btn btn-primary small" id="copyIpBtn" type="button"><span class="btn-text">Copy IP</span><span class="btn-arrow" aria-hidden="true">-></span></button>
         </article>
         <article class="panel tilt">
+          <span class="panel-corner tl" aria-hidden="true"></span>
           <h3>Links</h3>
           <p><a class="text-link" href="https://discord.gg/2K65RuvzCv" target="_blank" rel="noopener noreferrer">Discord</a></p>
           <p><a class="text-link" href="https://docs.google.com/document/d/1euIF9QYLFCGGJIUZQxXVLp-jb_vRwG0nl0U4RM62aBU" target="_blank" rel="noopener noreferrer">Rules</a></p>
         </article>
         <article class="panel tilt">
+          <span class="panel-corner tl" aria-hidden="true"></span>
           <h3>Rules (Minimal)</h3>
           <p class="line-item">No cheats or exploits.</p>
           <p class="line-item">Respect claims and event zones.</p>
@@ -124,7 +211,11 @@
   </main>
 
   <footer class="reveal">
-    <p>Paradox SMP - Faction Broadcast</p>
+    <div class="footer-inner">
+      <span class="footer-rule" aria-hidden="true"></span>
+      <p><span class="footer-tag" aria-hidden="true">[BROADCAST]</span> Paradox SMP - Faction Broadcast <span class="footer-tag" aria-hidden="true">[END]</span></p>
+      <span class="footer-rule" aria-hidden="true"></span>
+    </div>
   </footer>
 
   <script src="script.js"></script>
