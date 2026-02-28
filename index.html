@@ -12,6 +12,22 @@
 </head>
 <body>
   <canvas id="embers" aria-hidden="true"></canvas>
+  <canvas id="deadPixels" aria-hidden="true"></canvas>
+  <canvas id="necroStorm" aria-hidden="true"></canvas>
+  <div class="hidden-lore-layer" aria-hidden="true">
+    <span class="lore-fragment" data-lore="Not attention. Not wealth. Control." style="--x: 14%; --y: 22%; --d: 1.4s;"></span>
+    <span class="lore-fragment" data-lore="The strongest energy came from the living." style="--x: 72%; --y: 31%; --d: 2.1s;"></span>
+    <span class="lore-fragment" data-lore="Night felt longer when he was active." style="--x: 26%; --y: 63%; --d: 2.8s;"></span>
+    <span class="lore-fragment" data-lore="Not destroyed. Just contained." style="--x: 66%; --y: 74%; --d: 3.3s;"></span>
+    <span class="lore-fragment" data-lore="The orb is active again." style="--x: 48%; --y: 54%; --d: 1.9s;"></span>
+  </div>
+  <div class="error-overlay" id="errorOverlay" aria-hidden="true">
+    <div class="error-overlay-inner">
+      <p class="error-code">ACCESS ERROR [09]</p>
+      <h3>Containment Breach Attempt Detected</h3>
+      <p>Visual archive remains restricted.</p>
+    </div>
+  </div>
 
   <section class="hero" id="top">
     <div class="hero-stone" aria-hidden="true"></div>
@@ -21,7 +37,7 @@
       <p class="hero-sub" id="heroSub">A survival world where control is taken, tested, and remembered.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#join">Join</a>
-        <a class="btn btn-ghost" href="#artifact">Watch the Lore</a>
+        <a class="btn btn-ghost" href="#artifact">Watch the Event</a>
       </div>
     </div>
   </section>
@@ -42,7 +58,8 @@
       <div class="stability-meter" aria-label="World stability meter">
         <span id="stabilityBar"></span>
       </div>
-      <p class="state-note">World stability decreases until 0% on March 1, 2026 (Sunday).</p>
+      <p class="state-note">Countdown to event start (America/Chicago): <strong id="eventCountdown">--d --h --m --s</strong></p>
+      <p class="state-note">World stability decreases until 0% on Sunday, March 1, 2026 at 6:00 PM CT.</p>
     </section>
 
     <section class="artifact section reveal" id="artifact">
@@ -57,6 +74,28 @@
           <p>Visual documentation is restricted.</p>
           <p>Access requires ascension.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="events section reveal" id="events">
+      <h2>Events</h2>
+      <div class="event-feed">
+        <article class="panel event-panel tilt">
+          <p class="event-type">Necromancer Event</p>
+          <h3 class="event-title">?</h3>
+          <p class="line-item">Status: Pending Trigger</p>
+          <p class="line-item">Reward Tier: Unknown</p>
+          <div class="event-actions">
+            <button class="btn btn-ghost small" id="eventMoreInfoBtn" type="button">More Info</button>
+            <div class="necro-sigil" id="necroSigil" aria-hidden="true"></div>
+          </div>
+          <div class="zombie-error-panel" id="zombieErrorPanel" hidden>
+            <p class="zombie-code">NECRO-ARCHIVE ERROR [13]</p>
+            <h3>Unauthorized Necromantic Access</h3>
+            <p>Ritual logs are corrupted.</p>
+            <p>Entity signatures detected in sealed records.</p>
+          </div>
+        </article>
       </div>
     </section>
 
