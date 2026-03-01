@@ -7,7 +7,7 @@
   <meta name="description" content="Paradox SMP faction broadcast. Power is never free." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -59,7 +59,11 @@
     <button class="btn btn-ghost" id="musicToggleBtn" type="button"><span class="btn-text">Music: Off</span><span class="btn-arrow" aria-hidden="true">-></span></button>
     <button class="btn btn-ghost" id="musicNextBtn" type="button"><span class="btn-text">Next Track</span><span class="btn-arrow" aria-hidden="true">-></span></button>
     <p class="hero-music-status" id="musicNow">Music ready: Infinite Amethyst / Otherside / Pigstep / Mice On Venus / Creator</p>
+    <p class="audio-channel-indicator" id="audioChannelIndicator">FACTION CHANNEL</p>
   </div>
+  <button class="btn btn-ghost ai-fan-toggle" id="aiFanToggleBtn" type="button">
+    <span class="btn-text">Ai Hoshino Fan Page</span><span class="btn-arrow" aria-hidden="true">-></span>
+  </button>
 
   <section class="hero" id="top">
     <div class="hero-stone" aria-hidden="true"></div>
@@ -218,6 +222,336 @@
     </div>
   </footer>
 
+  <section class="ai-hoshino-page" id="aiHoshinoPage" hidden>
+    <div class="ai-fan-shell">
+      <header class="ai-fan-hero">
+        <div class="ai-fan-hero-copy">
+          <p class="ai-fan-kicker">Ai Hoshino Fan Page</p>
+          <h1 class="ai-fan-title">Ai Hoshino <span class="ai-title-star" aria-hidden="true">✦</span></h1>
+          <p class="ai-fan-tagline">The brightest star in the night sky, streaming live forever.</p>
+          <p class="ai-fan-rank" id="aiFanRankDisplay">Rank: Casual Fan ✦</p>
+          <p class="ai-fan-rank-note" id="aiFanRankNote">Build rank by cheering, voting, and sharing favorite moments.</p>
+          <div class="ai-hero-badges" aria-label="Ai fan status badges">
+            <span>LIVE IDOL BROADCAST</span>
+            <span>B-KOMACHI CENTER</span>
+            <span>SPOILER-SAFE SPACE</span>
+          </div>
+          <p class="ai-fan-blurb">Ai Hoshino is the face of modern idol mystique in <em>Oshi no Ko</em>: glittering stage confidence, emotional duality, and one of the most discussed character legacies in recent anime/manga fandom.</p>
+          <div class="ai-fan-quicklinks">
+            <a href="#aiBio">Bio</a>
+            <a href="#aiGallery">Gallery</a>
+            <a href="#aiQuotes">Quotes</a>
+            <a href="#aiSongs">Songs</a>
+            <a href="#aiFanStuff">Fan Zone</a>
+          </div>
+          <div class="ai-fan-toplinks">
+            <a href="https://oshinoko.fandom.com/wiki/Ai_Hoshino" target="_blank" rel="noopener noreferrer">Official Wiki Page</a>
+            <a href="https://open.spotify.com/playlist/7g6wIWufZJQhahMcporKgw" target="_blank" rel="noopener noreferrer">Spotify Playlist</a>
+            <button id="aiThemeModeBtn" type="button">Mode: Idol Stage</button>
+          </div>
+        </div>
+        <div class="ai-fan-hero-art">
+          <div class="ai-fan-hero-banner" role="img" aria-label="Ai Hoshino styled stage banner">
+            <div class="ai-stage-beams" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="ai-stage-stars" aria-hidden="true"></div>
+            <figure class="ai-hero-card">
+              <img src="https://static.wikia.nocookie.net/oshi_no_ko/images/5/57/Ai_Hoshino_Anime.png/revision/latest?cb=20221211122701" alt="Ai Hoshino official anime visual" class="ai-hero-img" />
+              <figcaption>B-Komachi Center Card // Idol Broadcast Edition</figcaption>
+            </figure>
+            <div class="ai-stage-crowd" aria-hidden="true"></div>
+            <p class="ai-stage-caption">LIVE FEED: B-Komachi Center Broadcast</p>
+          </div>
+          <div class="ai-duality-panel">
+            <article>
+              <h3>Idol Persona</h3>
+              <p>Perfect smile. Perfect timing. Perfect spotlight.</p>
+            </article>
+            <article>
+              <h3>Hidden Reality</h3>
+              <p>When the lights cut out, the emotional cost stays on stage.</p>
+            </article>
+          </div>
+        </div>
+      </header>
+
+      <section class="ai-fan-section tone-idol" id="aiBio">
+        <p class="ai-section-tag">IDOL PROFILE</p>
+        <h2>Bio / Profile + Connections</h2>
+        <div class="ai-fan-grid two">
+          <article class="ai-fan-card">
+            <h3>Basics</h3>
+            <ul>
+              <li>Name: Ai Hoshino</li>
+              <li>Series: Oshi no Ko</li>
+              <li>Occupation: Idol and center performer</li>
+              <li>Agency: Strawberry Productions</li>
+              <li>Group: B-Komachi (original generation)</li>
+              <li>Vibe: magnetic, theatrical, guarded, unreadable</li>
+              <li>Theme Core: performance versus truth</li>
+            </ul>
+            <p class="ai-ref">Who she is on stage and who she is in private are intentionally in conflict.</p>
+          </article>
+          <article class="ai-fan-card">
+            <h3>Timeline + Relationships</h3>
+            <ul>
+              <li>Teen debut and fast rise into national attention.</li>
+              <li>16-star showcase era: fanbase expansion and media saturation.</li>
+              <li>B-Komachi center role becomes her public identity.</li>
+              <li>Secret-protection period: high-performance scheduling and pressure.</li>
+              <li>Agency strategy, fan expectations, and personal secrecy collide.</li>
+              <li>Her legacy drives multiple character arcs long after Episode 1.</li>
+            </ul>
+            <p class="ai-warning">Spoiler warning: relationship details can include major plot turns.</p>
+            <details class="ai-spoiler">
+              <summary>Click To Reveal Relationship + Timeline Spoilers</summary>
+              <ul>
+                <li>Family revelations become one of the most important shocks in the series.</li>
+                <li>Her final arc defines motivations for several central characters.</li>
+                <li>The idol-fan myth and private reality split is the emotional spine of her story.</li>
+              </ul>
+            </details>
+          </article>
+        </div>
+      </section>
+
+      <section class="ai-fan-section tone-stage" id="aiQuotes">
+        <p class="ai-section-tag">ICONIC LINES</p>
+        <h2>Quotes + Iconic Lines</h2>
+        <article class="ai-fan-card ai-cinematic-quote">
+          <p class="ai-cine-kicker">EMOTIONAL ANCHOR</p>
+          <p class="ai-cine-line">"Lies are the most exquisite form of love."</p>
+          <p class="ai-ref">Reference: Episode 1 theme-defining line.</p>
+        </article>
+        <div class="ai-fan-grid four">
+          <article class="ai-fan-card">
+            <h3>Funny</h3>
+            <p>"Perfect smile now, panic later."</p>
+            <p class="ai-ref">Fan shorthand for her playful chaos.</p>
+          </article>
+          <article class="ai-fan-card">
+            <h3>Heartbreaking</h3>
+            <p>"I wanted to love and be loved for real."</p>
+            <p class="ai-ref">Private truth under idol performance.</p>
+          </article>
+          <article class="ai-fan-card">
+            <h3>Idol-Mode</h3>
+            <p>"I'll be your brightest star."</p>
+            <p class="ai-ref">Concert-facing promise energy.</p>
+          </article>
+          <article class="ai-fan-card">
+            <h3>Ai Being Ai</h3>
+            <p>"Cute first. Honest maybe later."</p>
+            <p class="ai-ref">Duality in one sentence.</p>
+          </article>
+        </div>
+        <article class="ai-fan-card ai-quote-machine">
+          <h3>Quote Shuffle</h3>
+          <p id="aiQuoteDisplay">Tap for a random Ai mood line.</p>
+          <button id="aiQuoteShuffleBtn" type="button">Cheer for New Quote ✦</button>
+        </article>
+        <article class="ai-fan-card ai-idol-desk">
+          <h3>Idol Desk</h3>
+          <p id="aiDailyVibe">Tonight's vibe: pink spotlight with soft chaos.</p>
+          <button id="aiVibeSpinBtn" type="button">Spin Daily Vibe ✧</button>
+          <div class="ai-cheer-meter" aria-label="Cheer meter">
+            <span id="aiCheerFill"></span>
+          </div>
+          <p id="aiCheerLabel" class="ai-note">Cheer Meter: 0%</p>
+        </article>
+        <blockquote class="ai-quote-pullout">"What happens when the spotlight turns off?"</blockquote>
+      </section>
+
+      <section class="ai-fan-section tone-idol" id="aiGallery">
+        <p class="ai-section-tag">VISUAL ARCHIVE</p>
+        <h2>Gallery</h2>
+        <div class="ai-fan-grid two">
+          <article class="ai-fan-card">
+            <h3>Official Art</h3>
+            <ul class="ai-credit-list">
+              <li>Primary source: <a href="https://ichigoproduction.com/" target="_blank" rel="noopener noreferrer">ichigoproduction.com</a></li>
+              <li>Character index: <a href="https://oshinoko.fandom.com/wiki/Ai_Hoshino" target="_blank" rel="noopener noreferrer">Ai Wiki Page</a></li>
+              <li>Official visuals only. All art is credited. No exceptions.</li>
+            </ul>
+          </article>
+          <article class="ai-fan-card">
+            <h3>Fanart</h3>
+            <ul class="ai-credit-list">
+              <li>Opt-in fanart only with direct source link.</li>
+              <li>Artist handle + original post link required.</li>
+              <li>Removal policy: immediate takedown on creator request.</li>
+              <li>Status: open for first featured submissions.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="ai-fan-grid two">
+          <article class="ai-fan-card">
+            <h3>Official Visual Picks</h3>
+            <div class="ai-gallery-real">
+              <figure>
+                <img src="https://static.wikia.nocookie.net/oshi_no_ko/images/5/57/Ai_Hoshino_Anime.png/revision/latest?cb=20221211122701" alt="Ai Hoshino anime full-body visual" loading="lazy" />
+                <figcaption>Anime Visual</figcaption>
+              </figure>
+              <figure>
+                <img src="https://static.wikia.nocookie.net/oshi_no_ko/images/a/a5/Ai_Hoshino_Profile.png/revision/latest?cb=20250311130440" alt="Ai Hoshino profile visual" loading="lazy" />
+                <figcaption>Profile Illustration</figcaption>
+              </figure>
+              <figure>
+                <img src="https://static.wikia.nocookie.net/oshi_no_ko/images/8/8a/Ai_Hoshino_Live_Action.png/revision/latest?cb=20241124082144" alt="Ai Hoshino live-action visual" loading="lazy" />
+                <figcaption>Live-Action Visual</figcaption>
+              </figure>
+            </div>
+          </article>
+          <article class="ai-fan-card">
+            <h3>Fan Feature Queue</h3>
+            <div class="ai-gallery-strip">
+              <span>Weekly spotlight slot #1: awaiting artist approval</span>
+              <span>Weekly spotlight slot #2: awaiting artist approval</span>
+              <span>Weekly spotlight slot #3: awaiting artist approval</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="ai-fan-section tone-truth" id="aiSongs">
+        <p class="ai-section-tag">MUSIC + STORY GUIDE</p>
+        <h2>Performances / Guide / Updates</h2>
+        <div class="ai-fan-grid two">
+          <article class="ai-fan-card">
+            <h3>Songs + Performances</h3>
+            <p>Spotify playlist: <a href="https://open.spotify.com/playlist/7g6wIWufZJQhahMcporKgw" target="_blank" rel="noopener noreferrer">Ai Hoshino Playlist</a></p>
+            <ul>
+              <li>Official uploads only (publisher/studio channels).</li>
+              <li>Lyrics policy: short snippets only, never full reposts.</li>
+              <li>Performance tone map: charm, control, then emotional rupture.</li>
+            </ul>
+            <h3>Favorite Performances</h3>
+            <ul class="ai-perf-list">
+              <li><button class="ai-time-btn" data-time="42">Episode 1 Stage Intro (00:42)</button></li>
+              <li><button class="ai-time-btn" data-time="86">B-Komachi Center Burst (01:26)</button></li>
+              <li><button class="ai-time-btn" data-time="134">Final Smile Beat (02:14)</button></li>
+            </ul>
+            <p id="aiPerfReadout" class="ai-note">Support a stage moment to pin your favorite.</p>
+          </article>
+          <article class="ai-fan-card">
+            <h3>Episode / Chapter Guide</h3>
+            <ul>
+              <li><strong>Episode 1:</strong> full setup of image, truth, and legacy.</li>
+              <li><strong>Later anime episodes:</strong> callbacks and perspective rebuilds.</li>
+              <li><strong>Manga early arcs:</strong> characterization foundation and myth-making.</li>
+              <li><strong>Manga later arcs:</strong> deeper consequences through other POVs.</li>
+              <li><strong>Spoiler-safe summary:</strong> Ai remains the emotional axis even off-screen.</li>
+            </ul>
+            <details class="ai-spoiler">
+              <summary>Click To Reveal Guide Spoilers</summary>
+              <p>Major twists tie directly to her hidden history, private relationships, and final-day consequences.</p>
+            </details>
+            <h3>News / Updates</h3>
+            <ul>
+              <li><a href="https://ichigoproduction.com/" target="_blank" rel="noopener noreferrer">Official Anime Website / Announcements</a></li>
+              <li><a href="https://oshinoko.fandom.com/wiki/Ai_Hoshino" target="_blank" rel="noopener noreferrer">Ai Wiki Updates</a></li>
+              <li><a href="https://www.amiami.com/eng/search/list/?s_keywords=oshi%20no%20ko%20ai" target="_blank" rel="noopener noreferrer">Merch Watch (AmiAmi Search)</a></li>
+            </ul>
+            <h3>Tour + Discography (Fan Lore)</h3>
+            <ul>
+              <li><strong>Tour Set:</strong> Night Spark Arc, Neon Promise, Starlight Confession</li>
+              <li><strong>Single:</strong> "Shine More" (Idol-mode anthem)</li>
+              <li><strong>Single:</strong> "Glass Smile" (duality ballad)</li>
+              <li><strong>Set Finale:</strong> "STAR T RAIN" center-stage version</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="ai-fan-section tone-idol" id="aiAesthetic">
+        <p class="ai-section-tag">AESTHETIC CORNER</p>
+        <h2>Ai-Core Design Resources</h2>
+        <div class="ai-fan-grid two">
+          <article class="ai-fan-card">
+            <h3>Color + Look</h3>
+            <div class="ai-palette">
+              <span style="--sw:#ff4fa3"></span>
+              <span style="--sw:#ffd8ef"></span>
+              <span style="--sw:#1b0033"></span>
+              <span style="--sw:#09040f"></span>
+            </div>
+            <p>Primary direction: hot pink, pale glow, stage violet, backstage black.</p>
+            <ul>
+              <li>Wallpaper baseline: 9:16 (1179x2556)</li>
+              <li>Lockscreen copy style: short line + one star glyph</li>
+              <li>Icon direction: star burst, stage lights, mic silhouette</li>
+            </ul>
+          </article>
+          <article class="ai-fan-card">
+            <h3>Ai-Core Pack Notes</h3>
+            <ul>
+              <li>Typography split: dramatic display + clean readable body.</li>
+              <li>Stage mode resources: glow overlays, sparkle masks, banner gradients.</li>
+              <li>Hidden mode resources: grain texture, low-sat overlays, red undertones.</li>
+              <li>Attribution rule: credit creators in-line and in footer link-outs.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="ai-fan-section tone-truth" id="aiFanStuff">
+        <p class="ai-section-tag">FAN ZONE</p>
+        <h2>Theories / Submissions / Guestbook</h2>
+        <div class="ai-fan-grid two">
+          <article class="ai-fan-card">
+            <h3>Fan Theories (Labeled)</h3>
+            <ul>
+              <li><strong>Theory:</strong> her public persona was a carefully built shield, not just branding.</li>
+              <li><strong>Theory:</strong> the story's central conflict is inherited identity, not revenge alone.</li>
+              <li><strong>Theory:</strong> Ai's final emotional shift reframes the meaning of "idol love."</li>
+            </ul>
+            <h3>Headcanons</h3>
+            <ul>
+              <li>She rehearsed smiles in mirror lighting before every major appearance.</li>
+              <li>She tracked fan letters by mood and kept the most personal ones private.</li>
+              <li>Her off-stage playlist leaned softer and slower than her idol image implied.</li>
+            </ul>
+            <h3>Fan Milestones</h3>
+            <ul id="aiMilestoneList" class="ai-milestone-list">
+              <li>Cheer 5 times to unlock Dedicated Supporter.</li>
+              <li>Cheer 18 times to unlock Idol Devotee.</li>
+              <li>Cheer 32 times to unlock True Star Follower.</li>
+            </ul>
+            <details class="ai-mini-poll">
+              <summary>Support Ai ✦ Pick a favorite mode</summary>
+              <div class="ai-poll-choices" id="aiPollChoices">
+                <button data-choice="stage">Stage Queen ✦</button>
+                <button data-choice="soft">Soft Smile ✧</button>
+                <button data-choice="chaotic">Chaotic Gremlin ☆</button>
+                <button data-choice="mystery">Mystery Aura ✦</button>
+              </div>
+              <p id="aiPollResult" class="ai-note">Vote to save your favorite mode.</p>
+            </details>
+          </article>
+          <article class="ai-fan-card" id="aiSubmissions">
+            <h3>Guestbook + Submissions</h3>
+            <p class="ai-warning">Moderation Rules: be respectful, no harassment, no untagged spoilers.</p>
+            <p class="ai-prompt">Leave your favorite Ai moment:</p>
+            <form id="aiGuestbookForm" class="ai-guest-form">
+              <input type="text" id="aiGuestName" placeholder="Name" required />
+              <textarea id="aiGuestMessage" rows="3" placeholder="Your favorite Ai moment..." required></textarea>
+              <label class="ai-check"><input type="checkbox" id="aiNoSpoilerCheck" required /> I confirm this message is spoiler-safe.</label>
+              <button type="submit">Send Love Message</button>
+            </form>
+            <ul id="aiGuestbookList" class="ai-guest-list"></ul>
+            <form class="ai-submit-form" id="aiSubmissionForm">
+              <input type="text" id="aiSubmitName" placeholder="Name / Handle" />
+              <input type="url" id="aiSubmitLink" placeholder="Post / Portfolio Link" />
+              <textarea id="aiSubmitText" rows="3" placeholder="Art, edit, essay, timeline, or playlist write-up"></textarea>
+              <button type="submit">Save Love Message Draft</button>
+            </form>
+            <p class="ai-note">Submission checklist: source links, permission status, spoiler tags.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <script src="ai-hoshino-music-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

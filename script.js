@@ -1,5 +1,4 @@
 ﻿const copyIpBtn = document.getElementById('copyIpBtn');
-const serverIp = document.getElementById('serverIp');
 const canvas = document.getElementById('embers');
 const deadPixelCanvas = document.getElementById('deadPixels');
 const necroStormCanvas = document.getElementById('necroStorm');
@@ -20,8 +19,44 @@ const heroArt = document.querySelector('.hero-art');
 const musicToggleBtn = document.getElementById('musicToggleBtn');
 const musicNextBtn = document.getElementById('musicNextBtn');
 const musicNowEl = document.getElementById('musicNow');
+const audioDock = document.getElementById('audioDock');
+const audioChannelIndicator = document.getElementById('audioChannelIndicator');
+const aiFanToggleBtn = document.getElementById('aiFanToggleBtn');
+const aiHoshinoPage = document.getElementById('aiHoshinoPage');
+const aiThemeModeBtn = document.getElementById('aiThemeModeBtn');
+const aiHeroBanner = document.querySelector('.ai-fan-hero-banner');
+const aiTitleStar = document.querySelector('.ai-title-star');
+const aiCinematicQuote = document.querySelector('.ai-cinematic-quote');
+const aiFanRankDisplay = document.getElementById('aiFanRankDisplay');
+const aiFanRankNote = document.getElementById('aiFanRankNote');
 const heroTitle = document.getElementById('heroTitle');
 const heroSub = document.getElementById('heroSub');
+const metaDescriptionTag = document.querySelector('meta[name="description"]');
+const defaultPageTitle = document.title;
+const defaultMetaDescription = metaDescriptionTag ? metaDescriptionTag.getAttribute('content') || '' : '';
+const aiGuestbookForm = document.getElementById('aiGuestbookForm');
+const aiGuestbookList = document.getElementById('aiGuestbookList');
+const aiGuestName = document.getElementById('aiGuestName');
+const aiGuestMessage = document.getElementById('aiGuestMessage');
+const aiNoSpoilerCheck = document.getElementById('aiNoSpoilerCheck');
+const aiSubmissionForm = document.getElementById('aiSubmissionForm');
+const aiSubmitName = document.getElementById('aiSubmitName');
+const aiSubmitLink = document.getElementById('aiSubmitLink');
+const aiSubmitText = document.getElementById('aiSubmitText');
+const aiQuoteDisplay = document.getElementById('aiQuoteDisplay');
+const aiQuoteShuffleBtn = document.getElementById('aiQuoteShuffleBtn');
+const aiDailyVibe = document.getElementById('aiDailyVibe');
+const aiVibeSpinBtn = document.getElementById('aiVibeSpinBtn');
+const aiCheerFill = document.getElementById('aiCheerFill');
+const aiCheerLabel = document.getElementById('aiCheerLabel');
+const aiMilestoneList = document.getElementById('aiMilestoneList');
+const aiPerfReadout = document.getElementById('aiPerfReadout');
+const aiPollChoices = document.getElementById('aiPollChoices');
+const aiPollResult = document.getElementById('aiPollResult');
+const aiQuizButtons = document.getElementById('aiQuizButtons');
+const aiQuizResult = document.getElementById('aiQuizResult');
+const aiSparkleBtn = document.getElementById('aiSparkleBtn');
+const aiSparkleCount = document.getElementById('aiSparkleCount');
 
 const stateSection = document.getElementById('state');
 const worldStabilityEl = document.getElementById('worldStability');
@@ -54,17 +89,135 @@ let shockwaveTrigger = null;
 let musicEnabled = false;
 let musicPlayer = null;
 let musicIndex = 0;
-const musicPlaylist = [
+let aiFanMode = false;
+let aiModeTransitionTimer = null;
+let aiFanSnapshot = null;
+const defaultMusicPlaylist = [
   { title: 'Infinite Amethyst', src: 'assets/music/infinite_amethyst.mp3' },
   { title: 'Otherside', src: 'assets/music/otherside.mp3' },
   { title: 'Pigstep', src: 'assets/music/pigstep.mp3' },
   { title: 'Mice On Venus', src: 'assets/music/mice_on_venus.mp3' },
   { title: 'Creator', src: 'assets/music/creator.mp3' }
 ];
+const aiHoshinoMusicConfig = window.aiHoshinoMusicConfig || {};
+const aiHoshinoMusicPlaylist = Array.isArray(aiHoshinoMusicConfig.playlist)
+  ? aiHoshinoMusicConfig.playlist
+    .map((track) => ({
+      title: String(track && track.title ? track.title : '').trim(),
+      src: String(track && track.src ? track.src : '').trim()
+    }))
+    .filter((track) => track.title && track.src)
+  : [];
+const aiHoshinoAutoplayOnMode = aiHoshinoMusicConfig.autoplayOnMode !== false;
+const aiFanXpKey = 'ai_hoshino_fan_xp_v1';
+const aiFanRankKey = 'ai_hoshino_fan_rank_v1';
+const aiFanRankThresholds = [
+  { minXp: 0, label: 'Casual Fan' },
+  { minXp: 8, label: 'Dedicated Supporter' },
+  { minXp: 18, label: 'Idol Devotee' },
+  { minXp: 32, label: 'True Star Follower' }
+];
+let faviconLinkEl = document.querySelector('link[rel="icon"]');
+if (!faviconLinkEl) {
+  faviconLinkEl = document.createElement('link');
+  faviconLinkEl.setAttribute('rel', 'icon');
+  document.head.appendChild(faviconLinkEl);
+}
+const defaultFaviconHref = faviconLinkEl ? (faviconLinkEl.getAttribute('href') || '') : '';
+
+function getActivePlaylist() {
+  if (aiFanMode && aiHoshinoMusicPlaylist.length) return aiHoshinoMusicPlaylist;
+  return defaultMusicPlaylist;
+}
 
 function setMusicStatus(text) {
   if (!musicNowEl) return;
   musicNowEl.textContent = text;
+}
+
+function setFaviconForMode(isAiMode) {
+  if (!faviconLinkEl) return;
+  if (!isAiMode) {
+    faviconLinkEl.setAttribute('href', defaultFaviconHref || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%23101923%22/%3E%3Cpath d=%22M14 46L50 18M20 16h28v8H20z%22 stroke=%22%235b8dff%22 stroke-width=%226%22 fill=%22none%22/%3E%3C/svg%3E');
+    return;
+  }
+  faviconLinkEl.setAttribute('href', 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop stop-color=%22%23ff5eaf%22/%3E%3Cstop offset=%221%22 stop-color=%22%236a2cff%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22url(%23g)%22/%3E%3Cpath d=%22M32 9l5.3 12 13.2 1-10.1 8 3.2 12.8L32 35.5 20.4 42.8 23.6 30 13.5 22l13.2-1z%22 fill=%22%23ffe17a%22/%3E%3C/svg%3E');
+}
+
+function getAiFanXp() {
+  const value = Number.parseInt(localStorage.getItem(aiFanXpKey) || '0', 10);
+  if (Number.isNaN(value)) return 0;
+  return Math.max(0, value);
+}
+
+function getAiFanRankByXp(xp) {
+  let current = aiFanRankThresholds[0];
+  aiFanRankThresholds.forEach((rank) => {
+    if (xp >= rank.minXp) current = rank;
+  });
+  return current.label;
+}
+
+function renderAiFanRank(note = '') {
+  const xp = getAiFanXp();
+  const rank = getAiFanRankByXp(xp);
+  localStorage.setItem(aiFanRankKey, rank);
+  if (aiFanRankDisplay) aiFanRankDisplay.textContent = `Rank: ${rank} ✦`;
+  if (aiFanRankNote) {
+    aiFanRankNote.textContent = note || `Fan Points: ${xp}  //  Cheer, vote, and send messages to rank up.`;
+  }
+  renderAiCheerMeter();
+  renderAiMilestones();
+}
+
+function awardAiFanXp(amount, context = 'support') {
+  const current = getAiFanXp();
+  const next = current + Math.max(1, amount);
+  localStorage.setItem(aiFanXpKey, String(next));
+  renderAiFanRank(`+${amount} Fan Points: ${context}. Total ${next}.`);
+}
+
+function renderAiCheerMeter() {
+  const xp = getAiFanXp();
+  const cap = 40;
+  const percent = Math.max(0, Math.min(100, Math.round((xp / cap) * 100)));
+  if (aiCheerFill) aiCheerFill.style.width = `${percent}%`;
+  if (aiCheerLabel) aiCheerLabel.textContent = `Cheer Meter: ${percent}%`;
+}
+
+function renderAiMilestones() {
+  if (!aiMilestoneList) return;
+  const xp = getAiFanXp();
+  const dedicated = xp >= 8;
+  const devotee = xp >= 18;
+  const follower = xp >= 32;
+  aiMilestoneList.innerHTML = `
+    <li>${dedicated ? '✓' : '○'} Dedicated Supporter (${Math.min(xp, 8)}/8)</li>
+    <li>${devotee ? '✓' : '○'} Idol Devotee (${Math.min(xp, 18)}/18)</li>
+    <li>${follower ? '✓' : '○'} True Star Follower (${Math.min(xp, 32)}/32)</li>
+  `;
+}
+
+function setupAiDailyVibe() {
+  if (!aiDailyVibe || !aiVibeSpinBtn) return;
+  const vibes = [
+    'Tonight\'s vibe: pink spotlight with soft chaos.',
+    'Tonight\'s vibe: diamond smile, thunder applause.',
+    'Tonight\'s vibe: star-eyes, glitter rain, center stage.',
+    'Tonight\'s vibe: backstage whispers, bright encore.',
+    'Tonight\'s vibe: idol poise with a tiny gremlin laugh.'
+  ];
+
+  const setRandomVibe = () => {
+    const pick = vibes[Math.floor(Math.random() * vibes.length)];
+    aiDailyVibe.textContent = pick;
+  };
+
+  setRandomVibe();
+  aiVibeSpinBtn.addEventListener('click', () => {
+    awardAiFanXp(1, 'daily vibe spin');
+    setRandomVibe();
+  });
 }
 
 function ensureMusicPlayer() {
@@ -75,7 +228,9 @@ function ensureMusicPlayer() {
 
   musicPlayer.addEventListener('ended', () => {
     if (!musicEnabled) return;
-    playMusicTrack((musicIndex + 1) % musicPlaylist.length, true);
+    const activePlaylist = getActivePlaylist();
+    if (!activePlaylist.length) return;
+    playMusicTrack((musicIndex + 1) % activePlaylist.length, true);
   });
 }
 
@@ -84,6 +239,17 @@ function updateMusicUI() {
   const label = musicToggleBtn.querySelector('.btn-text');
   if (label) label.textContent = musicEnabled ? 'Music: On' : 'Music: Off';
   musicToggleBtn.classList.toggle('music-on', musicEnabled);
+}
+
+function updateBroadcastChannelUI() {
+  const aiChannelActive = aiFanMode && aiHoshinoMusicPlaylist.length > 0;
+  if (audioDock) audioDock.classList.toggle('ai-channel-active', aiChannelActive);
+  if (!audioChannelIndicator) return;
+  if (aiFanMode) {
+    audioChannelIndicator.textContent = aiChannelActive ? 'AI CHANNEL OVERRIDE' : 'AI CHANNEL (NO TRACKS)';
+  } else {
+    audioChannelIndicator.textContent = 'FACTION CHANNEL';
+  }
 }
 
 function stopMusic() {
@@ -99,12 +265,20 @@ function disableMusicWithMessage(msg) {
 }
 
 function playMusicTrack(index, autoplay = true, attempts = 0) {
-  if (!musicPlaylist.length) return;
+  const activePlaylist = getActivePlaylist();
+  if (!activePlaylist.length) {
+    if (aiFanMode) {
+      setMusicStatus('No Ai Hoshino tracks found. Edit ai-hoshino-music-config.js');
+    } else {
+      setMusicStatus('No tracks configured');
+    }
+    return;
+  }
   ensureMusicPlayer();
   if (!musicPlayer) return;
 
-  musicIndex = ((index % musicPlaylist.length) + musicPlaylist.length) % musicPlaylist.length;
-  const track = musicPlaylist[musicIndex];
+  musicIndex = ((index % activePlaylist.length) + activePlaylist.length) % activePlaylist.length;
+  const track = activePlaylist[musicIndex];
   setMusicStatus(`Loading: ${track.title}`);
 
   const onCanPlay = () => {
@@ -122,11 +296,15 @@ function playMusicTrack(index, autoplay = true, attempts = 0) {
   };
 
   const onError = () => {
-    if (attempts + 1 >= musicPlaylist.length) {
-      setMusicStatus(`Track unavailable: ${track.title}. Add files in assets/music/`);
+    if (attempts + 1 >= activePlaylist.length) {
+      if (aiFanMode) {
+        setMusicStatus(`Track unavailable: ${track.title}. Check ai-hoshino-music-config.js`);
+      } else {
+        setMusicStatus(`Track unavailable: ${track.title}. Add files in assets/music/`);
+      }
       return;
     }
-    playMusicTrack((musicIndex + 1) % musicPlaylist.length, autoplay && musicEnabled, attempts + 1);
+    playMusicTrack((musicIndex + 1) % activePlaylist.length, autoplay && musicEnabled, attempts + 1);
   };
 
   musicPlayer.oncanplay = onCanPlay;
@@ -158,7 +336,7 @@ function setMusicEnabled(enabled) {
 
   musicPlayer.play()
     .then(() => {
-      const current = musicPlaylist[musicIndex];
+      const current = getActivePlaylist()[musicIndex];
       if (current) setMusicStatus(`Now Playing: ${current.title}`);
     })
     .catch(() => {
@@ -178,9 +356,593 @@ function setupAudioSystem() {
 
   if (musicNextBtn) {
     musicNextBtn.addEventListener('click', () => {
-      playMusicTrack((musicIndex + 1) % musicPlaylist.length, musicEnabled);
+      const activePlaylist = getActivePlaylist();
+      if (!activePlaylist.length) {
+        if (aiFanMode) setMusicStatus('Add Ai Hoshino tracks in ai-hoshino-music-config.js');
+        return;
+      }
+      playMusicTrack((musicIndex + 1) % activePlaylist.length, musicEnabled);
     });
   }
+}
+
+function setButtonLabel(btn, label) {
+  if (!btn) return;
+  const textEl = btn.querySelector('.btn-text');
+  if (textEl) textEl.textContent = label;
+  else btn.textContent = label;
+}
+
+function readNode(selector, property = 'textContent') {
+  const el = document.querySelector(selector);
+  if (!el) return null;
+  if (property === 'href') return el.getAttribute('href');
+  if (property === 'content') return el.getAttribute('content');
+  if (property === 'datasetLore') return el.dataset.lore || '';
+  return el[property];
+}
+
+function writeNode(selector, value, property = 'textContent') {
+  const el = document.querySelector(selector);
+  if (!el || value === null || value === undefined) return;
+  if (property === 'href') {
+    el.setAttribute('href', value);
+    return;
+  }
+  if (property === 'content') {
+    el.setAttribute('content', value);
+    return;
+  }
+  if (property === 'datasetLore') {
+    el.dataset.lore = value;
+    return;
+  }
+  el[property] = value;
+}
+
+function captureAiFanSnapshot() {
+  if (aiFanSnapshot) return;
+
+  const targets = [
+    ['title', 'text'],
+    ['meta[name="description"]', 'content'],
+    ['.server-label', 'innerHTML'],
+    ['#heroTitle', 'innerHTML'],
+    ['#heroTitle', 'datasetText'],
+    ['#heroSub', 'textContent'],
+    ['.hero-actions .btn:nth-child(1) .btn-text', 'textContent'],
+    ['.hero-actions .btn:nth-child(2) .btn-text', 'textContent'],
+    ['.art-caption', 'textContent'],
+    ['.art-mini:nth-child(1) p', 'textContent'],
+    ['.art-mini:nth-child(2) p', 'textContent'],
+    ['#world h2', 'innerHTML'],
+    ['#world p', 'textContent'],
+    ['#state h2', 'innerHTML'],
+    ['.state-row--stability .state-key', 'innerHTML'],
+    ['.state-row--undead .state-key', 'innerHTML'],
+    ['.state-row--artifact .state-key', 'innerHTML'],
+    ['#worldStability', 'textContent'],
+    ['#undeadActivity', 'textContent'],
+    ['#artifactEnergy', 'textContent'],
+    ['#state .state-note:nth-of-type(1)', 'innerHTML'],
+    ['#state .state-note:nth-of-type(2)', 'innerHTML'],
+    ['#state .state-note:nth-of-type(3)', 'innerHTML'],
+    ['#stabilityRate', 'textContent'],
+    ['#eventCountdown', 'textContent'],
+    ['.telemetry-label', 'textContent'],
+    ['#telemetryText', 'textContent'],
+    ['#artifact h2', 'innerHTML'],
+    ['#artifact .excerpt', 'textContent'],
+    ['#revealArtifactBtn .btn-text', 'textContent'],
+    ['#containmentPanel h3', 'textContent'],
+    ['#containmentPanel p:nth-of-type(1)', 'textContent'],
+    ['#containmentPanel p:nth-of-type(2)', 'textContent'],
+    ['#containmentPanel p:nth-of-type(3)', 'textContent'],
+    ['#events h2', 'innerHTML'],
+    ['#events .event-type', 'textContent'],
+    ['#events .event-title', 'textContent'],
+    ['#events .event-panel .line-item:nth-of-type(1)', 'textContent'],
+    ['#events .event-panel .line-item:nth-of-type(2)', 'textContent'],
+    ['#events .event-panel .line-item:nth-of-type(3)', 'textContent'],
+    ['#eventMoreInfoBtn .btn-text', 'textContent'],
+    ['#zombieErrorPanel .zombie-code', 'textContent'],
+    ['#zombieErrorPanel h3', 'textContent'],
+    ['#zombieErrorPanel p:nth-of-type(1)', 'textContent'],
+    ['#zombieErrorPanel p:nth-of-type(2)', 'textContent'],
+    ['#join h2', 'innerHTML'],
+    ['#join .panel:nth-child(1) h3', 'textContent'],
+    ['#join .panel:nth-child(1) .line-item:nth-of-type(1)', 'innerHTML'],
+    ['#join .panel:nth-child(1) .line-item:nth-of-type(2)', 'textContent'],
+    ['#copyIpBtn .btn-text', 'textContent'],
+    ['#join .panel:nth-child(2) h3', 'textContent'],
+    ['#join .panel:nth-child(2) p:nth-of-type(1) .text-link', 'textContent'],
+    ['#join .panel:nth-child(2) p:nth-of-type(2) .text-link', 'textContent'],
+    ['#join .panel:nth-child(2) p:nth-of-type(1) .text-link', 'href'],
+    ['#join .panel:nth-child(2) p:nth-of-type(2) .text-link', 'href'],
+    ['#join .panel:nth-child(3) h3', 'textContent'],
+    ['#join .panel:nth-child(3) .line-item:nth-of-type(1)', 'textContent'],
+    ['#join .panel:nth-child(3) .line-item:nth-of-type(2)', 'textContent'],
+    ['#join .panel:nth-child(3) .line-item:nth-of-type(3)', 'textContent'],
+    ['footer .footer-inner p', 'innerHTML']
+  ];
+
+  aiFanSnapshot = {
+    targets: targets.map(([selector, property]) => {
+      let value = null;
+      if (selector === 'title') value = document.title;
+      else if (property === 'datasetText') {
+        value = heroTitle
+          ? (heroTitle.dataset.text || heroTitle.textContent.replace(/\s+/g, ' ').trim())
+          : '';
+      }
+      else value = readNode(selector, property);
+      return { selector, property, value };
+    }),
+    loreFragments: Array.from(loreFragments).map((fragment) => ({
+      lore: fragment.dataset.lore || '',
+      text: fragment.textContent || ''
+    }))
+  };
+}
+
+function restoreAiFanSnapshot() {
+  if (!aiFanSnapshot) return;
+  aiFanSnapshot.targets.forEach(({ selector, property, value }) => {
+    if (selector === 'title') {
+      if (typeof value === 'string') document.title = value;
+      return;
+    }
+    if (property === 'datasetText') {
+      if (heroTitle) heroTitle.dataset.text = value || '';
+      return;
+    }
+    writeNode(selector, value, property);
+  });
+
+  aiFanSnapshot.loreFragments.forEach((saved, i) => {
+    const fragment = loreFragments[i];
+    if (!fragment) return;
+    fragment.dataset.lore = saved.lore;
+    fragment.textContent = saved.text;
+  });
+}
+
+function applyAiFanContent() {
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) metaDescription.setAttribute('content', 'Ai Hoshino Fan Page - cute idol sparkle mode.');
+  document.title = 'Ai Hoshino Fan Page | Cute Sparkle Broadcast';
+
+  writeNode('.server-label', '<span class="label-bracket" aria-hidden="true">//</span> AI HOSHINO <span class="label-bracket" aria-hidden="true">//</span>', 'innerHTML');
+  writeNode('#heroTitle', '<span class="word-reveal">Ai</span> <span class="word-reveal">Hoshino</span> <span class="word-reveal">Cutie</span> <span class="word-reveal">Star.</span>', 'innerHTML');
+  if (heroTitle) heroTitle.dataset.text = 'Ai Hoshino Cutie Star.';
+  writeNode('#heroSub', 'Welcome to the cutest Ai Hoshino fan page: sparkles, songs, and endless idol love.');
+  writeNode('.hero-actions .btn:nth-child(1) .btn-text', 'Enter Fan Hub');
+  writeNode('.hero-actions .btn:nth-child(2) .btn-text', 'See Idol Moments');
+  writeNode('.art-caption', 'B-Komachi Stage Feed // Idol visuals online');
+  writeNode('.art-mini:nth-child(1) p', 'Glow Stage Cam');
+  writeNode('.art-mini:nth-child(2) p', 'Star Idol Channel');
+
+  writeNode('#world h2', '<span class="h2-rule" aria-hidden="true"></span>About Ai', 'innerHTML');
+  writeNode('#world p', 'Ai Hoshino is pure idol magic: bright smile, big star energy, and unforgettable performances.');
+
+  writeNode('#state h2', '<span class="h2-rule" aria-hidden="true"></span>Fan Status', 'innerHTML');
+  writeNode('.state-row--stability .state-key', '<span class="state-dot" aria-hidden="true"></span>Fan Excitement', 'innerHTML');
+  writeNode('.state-row--undead .state-key', '<span class="state-dot" aria-hidden="true"></span>Idol Energy', 'innerHTML');
+  writeNode('.state-row--artifact .state-key', '<span class="state-dot" aria-hidden="true"></span>Stage Sparkle', 'innerHTML');
+  writeNode('#worldStability', '100%');
+  writeNode('#undeadActivity', 'Sparkling');
+  writeNode('#artifactEnergy', 'MAX');
+  writeNode('#eventCountdown', 'ALWAYS LIVE');
+  writeNode('#state .state-note:nth-of-type(1)', 'Countdown to next cute encore: <strong>Tonight</strong>', 'innerHTML');
+  writeNode('#state .state-note:nth-of-type(2)', 'Ai Hoshino Fan Page enabled. Hearts and sparkles are now online.', 'innerHTML');
+  writeNode('#state .state-note:nth-of-type(3)', 'Kawaii Rate: <strong>Infinite</strong>', 'innerHTML');
+  writeNode('#stabilityRate', '+MAX');
+  writeNode('.telemetry-label', 'Live Fanlog');
+  writeNode('#telemetryText', '[IDOL] Stage lights synced. Crowd hearts at full volume.');
+
+  writeNode('#artifact h2', '<span class="h2-rule" aria-hidden="true"></span>Idol Archive', 'innerHTML');
+  writeNode('#artifact .excerpt', 'A highlight vault dedicated to Ai Hoshino performances, visuals, and legendary fan moments.');
+  writeNode('#revealArtifactBtn .btn-text', 'Open Gallery');
+  writeNode('#containmentPanel h3', 'Favorite Moment');
+  writeNode('#containmentPanel p:nth-of-type(1)', 'This archive is full of iconic performances.');
+  writeNode('#containmentPanel p:nth-of-type(2)', 'Ai shines on every stage.');
+  writeNode('#containmentPanel p:nth-of-type(3)', 'Fan hearts stay locked in forever.');
+
+  writeNode('#events h2', '<span class="h2-rule" aria-hidden="true"></span>Top Moments', 'innerHTML');
+  writeNode('#events .event-type', 'Ai Hoshino Spotlight');
+  writeNode('#events .event-title', 'Ai');
+  writeNode('#events .event-panel .line-item:nth-of-type(1)', 'Status: Center Stage');
+  writeNode('#events .event-panel .line-item:nth-of-type(2)', 'Song: STAR T RAIN');
+  writeNode('#events .event-panel .line-item:nth-of-type(3)', 'Fan Hearts: Unlimited');
+  writeNode('#eventMoreInfoBtn .btn-text', 'More Lore');
+  writeNode('#zombieErrorPanel .zombie-code', 'FAN ARCHIVE [AI]');
+  writeNode('#zombieErrorPanel h3', 'Idol Lore Unlocked');
+  writeNode('#zombieErrorPanel p:nth-of-type(1)', 'Every smile is iconic.');
+  writeNode('#zombieErrorPanel p:nth-of-type(2)', 'Every performance is legendary.');
+
+  writeNode('#join h2', '<span class="h2-rule" aria-hidden="true"></span>Fan Hub', 'innerHTML');
+  writeNode('#join .panel:nth-child(1) h3', 'Profile');
+  writeNode('#serverIp', 'Ai Hoshino');
+  writeNode('#join .panel:nth-child(1) .line-item:nth-of-type(2)', 'Group: B-Komachi');
+  writeNode('#copyIpBtn .btn-text', 'Copy Name');
+  writeNode('#join .panel:nth-child(2) h3', 'Links');
+  writeNode('#join .panel:nth-child(2) p:nth-of-type(1) .text-link', 'Wiki');
+  writeNode('#join .panel:nth-child(2) p:nth-of-type(2) .text-link', 'Songs');
+  writeNode('#join .panel:nth-child(2) p:nth-of-type(1) .text-link', 'https://oshi-no-ko.fandom.com/wiki/Ai_Hoshino', 'href');
+  writeNode('#join .panel:nth-child(2) p:nth-of-type(2) .text-link', 'https://www.youtube.com/results?search_query=ai+hoshino+song', 'href');
+  writeNode('#join .panel:nth-child(3) h3', 'Fan Rules');
+  writeNode('#join .panel:nth-child(3) .line-item:nth-of-type(1)', 'Keep cheering.');
+  writeNode('#join .panel:nth-child(3) .line-item:nth-of-type(2)', 'Share favorite moments.');
+  writeNode('#join .panel:nth-child(3) .line-item:nth-of-type(3)', 'Protect the star.');
+
+  writeNode('footer .footer-inner p', '<span class="footer-tag" aria-hidden="true">[KAWAII]</span> Ai Hoshino Fan Page <span class="footer-tag" aria-hidden="true">[END]</span>', 'innerHTML');
+
+  const fanLoreLines = [
+    'The brightest idol in the sky.',
+    'A single smile can light the stage.',
+    'Every song feels like a promise.',
+    'The crowd never forgets her glow.',
+    'Ai forever, always center stage.',
+    'One voice, countless hearts moved.',
+    'Idol aura remains unmatched.',
+    'Fan hearts synchronized.'
+  ];
+
+  loreFragments.forEach((fragment, i) => {
+    const line = fanLoreLines[i % fanLoreLines.length];
+    fragment.dataset.lore = line;
+    fragment.textContent = line;
+  });
+
+  document.body.classList.remove('necro-mode', 'overrun-mode', 'distort-1', 'distort-2', 'distort-3', 'distort-4');
+  if (overrunOverlay) overrunOverlay.classList.remove('active');
+  if (zombieBreachOverlay) zombieBreachOverlay.classList.remove('active');
+  if (errorOverlay) errorOverlay.classList.remove('active');
+}
+
+function setAiFanMode(enabled) {
+  aiFanMode = !!enabled;
+  if (aiModeTransitionTimer) {
+    clearTimeout(aiModeTransitionTimer);
+    aiModeTransitionTimer = null;
+  }
+
+  document.body.classList.remove('ai-hijack-active', 'ai-hijack-transition', 'ai-hijack-enter', 'ai-hijack-exit');
+  document.body.classList.toggle('ai-fan-mode', aiFanMode);
+  if (aiHoshinoPage) aiHoshinoPage.hidden = !aiFanMode;
+  if (aiFanMode) window.scrollTo(0, 0);
+
+  setButtonLabel(aiFanToggleBtn, aiFanMode ? 'Back to SMP' : 'Ai Hoshino Fan Page');
+  updateBroadcastChannelUI();
+
+  if (aiFanMode) {
+    document.title = 'Ai Hoshino Fan Page | Idol Stage vs Hidden Reality';
+    if (metaDescriptionTag) metaDescriptionTag.setAttribute('content', 'Ai Hoshino fan experience focused on idol-stage duality.');
+    setFaviconForMode(true);
+    renderAiFanRank();
+    if (musicEnabled) {
+      if (aiHoshinoMusicPlaylist.length) {
+        playMusicTrack(0, aiHoshinoAutoplayOnMode);
+      } else {
+        setMusicStatus('No Ai Hoshino tracks yet. Edit ai-hoshino-music-config.js');
+      }
+    } else if (aiHoshinoMusicPlaylist.length) {
+      setMusicStatus(`Ai Hoshino playlist ready: ${aiHoshinoMusicPlaylist.map((x) => x.title).join(' / ')}`);
+    } else {
+      setMusicStatus('Add Ai Hoshino songs in ai-hoshino-music-config.js');
+    }
+  } else {
+    document.title = defaultPageTitle;
+    if (metaDescriptionTag) metaDescriptionTag.setAttribute('content', defaultMetaDescription);
+    setFaviconForMode(false);
+    if (musicEnabled) {
+      playMusicTrack(0, true);
+    } else {
+      setMusicStatus('Music ready: Infinite Amethyst / Otherside / Pigstep / Mice On Venus / Creator');
+    }
+  }
+
+}
+
+function setupAiFanToggle() {
+  if (!aiFanToggleBtn) return;
+  if (aiHoshinoPage) aiHoshinoPage.hidden = true;
+  setButtonLabel(aiFanToggleBtn, 'Ai Hoshino Fan Page');
+  updateBroadcastChannelUI();
+  renderAiFanRank();
+  aiFanToggleBtn.addEventListener('click', () => {
+    setAiFanMode(!aiFanMode);
+  });
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function setupAiThemeMode() {
+  if (!aiThemeModeBtn) return;
+  const key = 'ai_hoshino_persona_mode_v2';
+
+  const applyMode = (mode) => {
+    const hiddenReality = mode === 'hidden-reality';
+    document.body.classList.toggle('ai-after-hours', hiddenReality);
+    document.body.classList.toggle('ai-hidden-reality', hiddenReality);
+    document.body.classList.toggle('ai-idol-stage', !hiddenReality);
+    aiThemeModeBtn.textContent = hiddenReality ? 'Mode: Hidden Reality' : 'Mode: Idol Stage';
+    if (musicPlayer) musicPlayer.volume = hiddenReality ? 0.3 : 0.42;
+    if (aiTitleStar) {
+      aiTitleStar.classList.remove('mode-flash');
+      void aiTitleStar.offsetWidth;
+      aiTitleStar.classList.add('mode-flash');
+      setTimeout(() => aiTitleStar.classList.remove('mode-flash'), 700);
+    }
+    window.dispatchEvent(new CustomEvent('ai-mode-change', { detail: { mode: hiddenReality ? 'hidden-reality' : 'idol-stage' } }));
+  };
+
+  const savedMode = localStorage.getItem(key);
+  applyMode(savedMode === 'hidden-reality' ? 'hidden-reality' : 'idol-stage');
+
+  aiThemeModeBtn.addEventListener('click', () => {
+    const nextMode = document.body.classList.contains('ai-hidden-reality') ? 'idol-stage' : 'hidden-reality';
+    localStorage.setItem(key, nextMode);
+    awardAiFanXp(1, 'mode shift');
+    applyMode(nextMode);
+  });
+}
+
+function renderAiGuestbook() {
+  if (!aiGuestbookList) return;
+  const raw = localStorage.getItem('ai_hoshino_guestbook_v1');
+  let entries = [];
+  if (raw) {
+    try {
+      entries = JSON.parse(raw);
+    } catch {
+      entries = [];
+    }
+  }
+
+  aiGuestbookList.innerHTML = '';
+  entries.forEach((entry) => {
+    const li = document.createElement('li');
+    const name = escapeHtml(entry.name || 'Fan');
+    const message = escapeHtml(entry.message || '');
+    const ts = escapeHtml(entry.createdAt || '');
+    li.innerHTML = `<strong>${name}</strong> <span>${ts}</span><p>${message}</p>`;
+    aiGuestbookList.appendChild(li);
+  });
+}
+
+function setupAiGuestbook() {
+  if (!aiGuestbookForm || !aiGuestName || !aiGuestMessage || !aiNoSpoilerCheck) return;
+  const spoilerPattern = /\b(dies|death|killed|murder|ending)\b/i;
+  renderAiGuestbook();
+
+  aiGuestbookForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const name = aiGuestName.value.trim().slice(0, 60);
+    const message = aiGuestMessage.value.trim().slice(0, 300);
+    if (!name || !message || !aiNoSpoilerCheck.checked) return;
+
+    if (spoilerPattern.test(message)) {
+      alert('Please keep guestbook comments spoiler-safe.');
+      return;
+    }
+
+    const raw = localStorage.getItem('ai_hoshino_guestbook_v1');
+    let entries = [];
+    if (raw) {
+      try {
+        entries = JSON.parse(raw);
+      } catch {
+        entries = [];
+      }
+    }
+
+    entries.unshift({
+      name,
+      message,
+      createdAt: new Date().toLocaleDateString()
+    });
+    entries = entries.slice(0, 30);
+    localStorage.setItem('ai_hoshino_guestbook_v1', JSON.stringify(entries));
+    awardAiFanXp(3, 'love message sent');
+
+    aiGuestbookForm.reset();
+    renderAiGuestbook();
+  });
+}
+
+function setupAiSubmissionDraft() {
+  if (!aiSubmissionForm || !aiSubmitName || !aiSubmitLink || !aiSubmitText) return;
+  const key = 'ai_hoshino_submission_draft_v1';
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(key) || '{}');
+    aiSubmitName.value = saved.name || '';
+    aiSubmitLink.value = saved.link || '';
+    aiSubmitText.value = saved.text || '';
+  } catch {
+    // ignore malformed local storage data
+  }
+
+  aiSubmissionForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const draft = {
+      name: aiSubmitName.value.trim().slice(0, 80),
+      link: aiSubmitLink.value.trim().slice(0, 240),
+      text: aiSubmitText.value.trim().slice(0, 700)
+    };
+    if (!draft.name && !draft.link && !draft.text) return;
+    localStorage.setItem(key, JSON.stringify(draft));
+    awardAiFanXp(3, 'submission draft saved');
+  });
+}
+
+function setupAiQuoteMachine() {
+  if (!aiQuoteDisplay || !aiQuoteShuffleBtn) return;
+  const idolQuotes = [
+    { line: 'A perfect idol smile can hide a thousand thoughts.', tag: 'Idol Mode' },
+    { line: 'Ai turns every entrance into a full event.', tag: 'Stage Energy' },
+    { line: 'The spotlight bends toward her every time.', tag: 'Center Aura' },
+    { line: 'Cute first. Precise second. Legendary always.', tag: 'Ai Being Ai' }
+  ];
+  const hiddenQuotes = [
+    { line: 'The duality is the point: sparkle and shadow together.', tag: 'Character Core' },
+    { line: 'Her glow feels warm even when the scene hurts.', tag: 'Heartbreaking' },
+    { line: 'Performance is loud. Truth is quiet.', tag: 'Hidden Reality' },
+    { line: 'What she never says matters most.', tag: 'Backstage Tone' }
+  ];
+
+  const getPool = () => (
+    document.body.classList.contains('ai-hidden-reality') ? hiddenQuotes : idolQuotes
+  );
+
+  const renderQuote = () => {
+    const pool = getPool();
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    aiQuoteDisplay.classList.remove('quote-fade-in');
+    void aiQuoteDisplay.offsetWidth;
+    aiQuoteDisplay.textContent = `"${pick.line}" - ${pick.tag}`;
+    aiQuoteDisplay.dataset.mode = document.body.classList.contains('ai-hidden-reality') ? 'hidden' : 'idol';
+    aiQuoteDisplay.classList.add('quote-fade-in');
+  };
+
+  renderQuote();
+  aiQuoteShuffleBtn.addEventListener('click', () => {
+    awardAiFanXp(1, 'quote cheer');
+    renderQuote();
+  });
+  window.addEventListener('ai-mode-change', renderQuote);
+}
+
+function setupAiPerformancePins() {
+  const buttons = document.querySelectorAll('.ai-time-btn');
+  if (!buttons.length || !aiPerfReadout) return;
+  const key = 'ai_hoshino_performance_pin_v1';
+
+  const apply = (seconds) => {
+    if (!seconds) {
+      aiPerfReadout.textContent = 'Support a stage moment to pin your favorite.';
+      return;
+    }
+    const sec = Number.parseInt(seconds, 10);
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    aiPerfReadout.textContent = `Pinned favorite highlight at ${m}:${String(s).padStart(2, '0')}.`;
+  };
+
+  apply(localStorage.getItem(key));
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const time = btn.dataset.time || '';
+      localStorage.setItem(key, time);
+      awardAiFanXp(2, 'performance support');
+      apply(time);
+    });
+  });
+}
+
+function setupAiPoll() {
+  if (!aiPollChoices || !aiPollResult) return;
+  const key = 'ai_hoshino_poll_choice_v1';
+  const labels = {
+    stage: 'Stage Queen',
+    soft: 'Soft Smile',
+    chaotic: 'Chaotic Gremlin',
+    mystery: 'Mystery Aura'
+  };
+
+  const apply = (choice) => {
+    const label = labels[choice];
+    aiPollResult.textContent = label
+      ? `Support registered: ${label}.`
+      : 'Support Ai ✦ to save your favorite mode.';
+  };
+
+  apply(localStorage.getItem(key) || '');
+  aiPollChoices.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const choice = btn.dataset.choice || '';
+      localStorage.setItem(key, choice);
+      awardAiFanXp(2, 'fan poll support');
+      apply(choice);
+    });
+  });
+}
+
+function setupAiQuizSparkle() {
+  const sparkleKey = 'ai_hoshino_sparkle_count_v1';
+
+  if (aiQuizButtons && aiQuizResult) {
+    aiQuizButtons.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const right = btn.dataset.ans === 'right';
+        aiQuizResult.textContent = right
+          ? 'Correct. Strawberry Productions is the right answer.'
+          : 'Not quite. Try again.';
+      });
+    });
+  }
+
+  if (aiSparkleBtn && aiSparkleCount) {
+    let count = Number.parseInt(localStorage.getItem(sparkleKey) || '0', 10);
+    if (Number.isNaN(count)) count = 0;
+    aiSparkleCount.textContent = `Sparkles: ${count}`;
+    aiSparkleBtn.addEventListener('click', () => {
+      count += 1;
+      localStorage.setItem(sparkleKey, String(count));
+      aiSparkleCount.textContent = `Sparkles: ${count}`;
+    });
+  }
+}
+
+function setupAiStageParallax() {
+  if (!aiHeroBanner) return;
+  let ticking = false;
+
+  const update = () => {
+    if (!aiFanMode) {
+      aiHeroBanner.style.setProperty('--stageShift', '0px');
+      ticking = false;
+      return;
+    }
+    const y = window.scrollY || 0;
+    const factor = document.body.classList.contains('ai-hidden-reality') ? -0.016 : -0.03;
+    const shift = Math.max(-18, Math.min(18, y * factor));
+    aiHeroBanner.style.setProperty('--stageShift', `${shift.toFixed(2)}px`);
+    ticking = false;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }, { passive: true });
+}
+
+function setupAiCinematicReveal() {
+  if (!aiCinematicQuote) return;
+  if (!('IntersectionObserver' in window)) {
+    aiCinematicQuote.classList.add('ai-inview');
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        aiCinematicQuote.classList.add('ai-inview');
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.22 });
+
+  observer.observe(aiCinematicQuote);
 }
 
 function getInstabilityLevel() {
@@ -262,9 +1024,10 @@ function runReveal() {
 }
 
 async function copyIp() {
-  if (!copyIpBtn || !serverIp) return;
+  const serverIpEl = document.getElementById('serverIp');
+  if (!copyIpBtn || !serverIpEl) return;
 
-  const ip = serverIp.textContent.trim();
+  const ip = serverIpEl.textContent.trim();
   const btnTextEl = copyIpBtn.querySelector('.btn-text');
 
   function setBtnLabel(label) {
@@ -280,7 +1043,7 @@ async function copyIp() {
   }
 
   setTimeout(() => {
-    setBtnLabel('Copy IP');
+    setBtnLabel(aiFanMode ? 'Copy Name' : 'Copy IP');
   }, 1200);
 }
 
@@ -303,6 +1066,13 @@ function runWorldState() {
   let liveTriggered = false;
 
   function update() {
+    if (aiFanMode) {
+      stateSection.classList.remove('world-warning', 'world-critical');
+      document.body.classList.remove('distort-1', 'distort-2', 'distort-3', 'distort-4');
+      document.documentElement.style.setProperty('--instability', '0.12');
+      return;
+    }
+
     const now = Date.now();
     const remaining = collapseDate.getTime() - now;
 
@@ -704,6 +1474,11 @@ function runHeroSubCycle() {
   let deleting = false;
 
   function tick() {
+    if (aiFanMode) {
+      setTimeout(tick, 600);
+      return;
+    }
+
     const line = lines[lineIndex];
 
     if (!deleting) {
@@ -740,8 +1515,6 @@ function runTitleGlitch() {
   if (!heroTitle) return;
 
   const chars = '!@#$%&*+-/?';
-  // get spans (word-reveal children) — fall back to plain text if none
-  const wordSpans = heroTitle.querySelectorAll('.word-reveal');
 
   function scrambleText(text) {
     return text.split('').map((ch) => {
@@ -751,6 +1524,8 @@ function runTitleGlitch() {
   }
 
   setInterval(() => {
+    if (aiFanMode) return;
+    const wordSpans = heroTitle.querySelectorAll('.word-reveal');
     if (!wordSpans.length) return;
     const originals = Array.from(wordSpans).map(s => s.textContent);
     let frame = 0;
@@ -1515,6 +2290,7 @@ function runTelemetry() {
 
   let idx = 0;
   setInterval(() => {
+    if (aiFanMode) return;
     const instability = getInstabilityLevel();
     const prefix = instability > 0.75 ? '[CRITICAL]' : instability > 0.45 ? '[WARN]' : '[INFO]';
     telemetryTextEl.textContent = `${prefix} ${lines[idx]}`;
@@ -1889,6 +2665,17 @@ function runEnergyOrb() {
 
 runReveal();
 setupAudioSystem();
+setupAiFanToggle();
+setFaviconForMode(false);
+setupAiThemeMode();
+setupAiGuestbook();
+setupAiSubmissionDraft();
+setupAiQuoteMachine();
+setupAiDailyVibe();
+setupAiPerformancePins();
+setupAiPoll();
+setupAiStageParallax();
+setupAiCinematicReveal();
 setupCopyButton();
 setArchiveCount(getArchiveCount());
 runWorldState();
