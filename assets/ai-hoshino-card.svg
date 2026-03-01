@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1040" role="img" aria-labelledby="t d">
+  <title id="t">Ai Hoshino Idol Card</title>
+  <desc id="d">Stylized idol card artwork with star motifs and stage lighting.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff5eaf"/>
+      <stop offset="50%" stop-color="#8b3fff"/>
+      <stop offset="100%" stop-color="#1b0a36"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="50%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#fff5c9" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#fff5c9" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dress" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd5ec"/>
+      <stop offset="100%" stop-color="#ff8bc9"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="1040" fill="url(#bg)"/>
+  <rect width="720" height="1040" fill="url(#spot)"/>
+  <g opacity="0.32">
+    <circle cx="95" cy="132" r="3" fill="#fff"/>
+    <circle cx="170" cy="188" r="2.5" fill="#fff"/>
+    <circle cx="612" cy="126" r="3" fill="#fff"/>
+    <circle cx="558" cy="210" r="2.4" fill="#fff"/>
+    <circle cx="366" cy="80" r="2.8" fill="#fff"/>
+  </g>
+  <g transform="translate(140 170)">
+    <ellipse cx="220" cy="640" rx="215" ry="70" fill="#160a2f" opacity="0.7"/>
+    <ellipse cx="220" cy="222" rx="168" ry="202" fill="#ffe8f4"/>
+    <path d="M103 460h234c34 0 62 28 62 62v128H41V522c0-34 28-62 62-62z" fill="url(#dress)"/>
+    <path d="M167 430h106l22 36h-150z" fill="#ffdff0"/>
+    <circle cx="172" cy="222" r="18" fill="#201246"/>
+    <circle cx="268" cy="222" r="18" fill="#201246"/>
+    <circle cx="172" cy="222" r="8" fill="#ffe15a"/>
+    <circle cx="268" cy="222" r="8" fill="#ffe15a"/>
+    <path d="M200 268c10 10 30 10 40 0" fill="none" stroke="#a73274" stroke-width="6" stroke-linecap="round"/>
+    <path d="M85 166c27-58 79-88 136-88s109 30 136 88c-18-81-84-131-136-131S103 85 85 166z" fill="#2a1456"/>
+    <path d="M109 174c24-42 67-64 111-64s87 22 111 64" fill="none" stroke="#7f4bcb" stroke-width="10" stroke-linecap="round"/>
+    <path d="M140 518h160l24 40H116z" fill="#fff0f8"/>
+    <circle cx="220" cy="520" r="19" fill="#ff58ae"/>
+    <path d="M220 500l6 14h15l-12 9 4 14-13-8-13 8 4-14-12-9h15z" fill="#ffd96f"/>
+  </g>
+  <g fill="#fff2a4" opacity="0.9">
+    <path d="M66 842l7 16 17 1-13 10 4 16-15-9-15 9 4-16-13-10 17-1z"/>
+    <path d="M654 772l6 13 15 1-11 9 3 13-13-7-13 7 3-13-11-9 15-1z"/>
+  </g>
+  <rect x="25" y="25" width="670" height="990" fill="none" stroke="#ffd9ef" stroke-opacity="0.85" stroke-width="6"/>
+  <text x="52" y="84" fill="#fff4fb" font-size="40" font-family="Georgia, serif" letter-spacing="2">AI HOSHINO</text>
+  <text x="52" y="124" fill="#ffe0f3" font-size="21" font-family="'Segoe UI', sans-serif" letter-spacing="3">B-KOMACHI CENTER CARD</text>
+  <text x="52" y="994" fill="#ffe6f6" font-size="17" font-family="'Segoe UI', sans-serif" letter-spacing="2">IDOL BROADCAST // FAN EDITION</text>
+</svg>
