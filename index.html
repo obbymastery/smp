@@ -1,557 +1,346 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paradox SMP | Faction Broadcast</title>
-  <meta name="description" content="Paradox SMP faction broadcast. Power is never free." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta
+    name="description"
+    content="Paradox SMP is a persistent Minecraft survival server with permanent builds, custom gear, active players, and a full retro 90s web makeover."
+  />
+  <title>Paradox SMP 1997 Control Center</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="starfield" aria-hidden="true"></canvas>
-  <canvas id="hexgrid" aria-hidden="true"></canvas>
-  <canvas id="fog" aria-hidden="true"></canvas>
-  <canvas id="embers" aria-hidden="true"></canvas>
-  <canvas id="lightning" aria-hidden="true"></canvas>
-  <canvas id="seep" aria-hidden="true"></canvas>
-  <canvas id="shockwave" aria-hidden="true"></canvas>
-  <canvas id="deadPixels" aria-hidden="true"></canvas>
-  <canvas id="necroStorm" aria-hidden="true"></canvas>
-  <canvas id="orbCanvas" aria-hidden="true"></canvas>
-  <canvas id="vizCanvas" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <audio id="musicElement" preload="auto"></audio>
 
-  <div class="overrun-overlay" id="overrunOverlay" aria-hidden="true">
-    <p class="overrun-code">OVERRUN PROTOCOL [ACTIVE]</p>
-  </div>
-  <div class="cursor-trail" id="cursorTrail" aria-hidden="true"></div>
-  <div class="aurora-layer" aria-hidden="true"></div>
-  <div class="vignette-layer" aria-hidden="true"></div>
-
-  <div class="hidden-lore-layer" aria-hidden="true">
-    <span class="lore-fragment" data-lore="Not attention. Not wealth. Control." style="--x: 14%; --y: 22%;"></span>
-    <span class="lore-fragment" data-lore="The strongest energy came from the living." style="--x: 72%; --y: 31%;"></span>
-    <span class="lore-fragment" data-lore="Night felt longer when he was active." style="--x: 26%; --y: 63%;"></span>
-    <span class="lore-fragment" data-lore="Not destroyed. Just contained." style="--x: 66%; --y: 74%;"></span>
-    <span class="lore-fragment" data-lore="The orb is active again." style="--x: 48%; --y: 54%;"></span>
-    <span class="lore-fragment" data-lore="Storms seemed to follow him." style="--x: 86%; --y: 56%;"></span>
-    <span class="lore-fragment" data-lore="The seal is weaker than it was." style="--x: 36%; --y: 18%;"></span>
-    <span class="lore-fragment" data-lore="He wanted control. It wanted more." style="--x: 58%; --y: 82%;"></span>
-  </div>
-
-  <div class="error-overlay" id="errorOverlay" aria-hidden="true">
-    <div class="error-overlay-inner">
-      <p class="error-code">ACCESS ERROR [09]</p>
-      <h3>Containment Breach Attempt Detected</h3>
-      <p>Visual archive remains restricted.</p>
-    </div>
-  </div>
-  <div class="zombie-breach-overlay" id="zombieBreachOverlay" aria-hidden="true">
-    <div class="zombie-breach-inner">
-      <p class="zombie-breach-code">UNDEAD SIGNAL OVERRUN [13]</p>
-      <p class="zombie-breach-line" id="zombieBreachLine">Grave-channel activity has entered the event feed.</p>
-    </div>
-  </div>
-  <div class="zombie-breach-swarm" id="zombieBreachSwarm" aria-hidden="true"></div>
-  <div class="audio-dock" id="audioDock">
-    <button class="btn btn-ghost" id="musicToggleBtn" type="button"><span class="btn-text">Music: Off</span><span class="btn-arrow" aria-hidden="true">-></span></button>
-    <button class="btn btn-ghost" id="musicNextBtn" type="button"><span class="btn-text">Next Track</span><span class="btn-arrow" aria-hidden="true">-></span></button>
-    <p class="hero-music-status" id="musicNow">Music ready: Infinite Amethyst / Otherside / Pigstep / Mice On Venus / Creator</p>
-    <p class="audio-channel-indicator" id="audioChannelIndicator">FACTION CHANNEL</p>
-  </div>
-  <button class="btn btn-ghost ai-fan-toggle" id="aiFanToggleBtn" type="button">
-    <span class="btn-text">Ai Hoshino Fan Page</span><span class="btn-arrow" aria-hidden="true">-></span>
-  </button>
-
-  <section class="hero" id="top">
-    <div class="hero-stone" aria-hidden="true"></div>
-    <div class="hero-viz" aria-hidden="true" id="heroViz"></div>
-    <div class="hero-shell">
-      <div class="hero-content reveal">
-        <p class="server-label"><span class="label-bracket" aria-hidden="true">//</span> PARADOX SMP <span class="label-bracket" aria-hidden="true">//</span></p>
-        <h1 id="heroTitle"><span class="word-reveal">Power</span> <span class="word-reveal">Is</span> <span class="word-reveal">Never</span> <span class="word-reveal">Free.</span></h1>
-        <p class="hero-sub" id="heroSub">A survival world where control is taken, tested, and remembered.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#join"><span class="btn-text">Join</span><span class="btn-arrow" aria-hidden="true">-></span></a>
-          <a class="btn btn-ghost" href="#artifact"><span class="btn-text">Watch the Event</span><span class="btn-arrow" aria-hidden="true">-></span></a>
-        </div>
+  <div class="page-shell">
+    <section class="window-shell marquee-shell" aria-label="Announcements">
+      <div class="title-bar">
+        <span>PARADOX NEWS TICKER</span>
+        <span>LIVE FEED</span>
       </div>
-      <aside class="hero-art reveal" aria-hidden="true">
-        <div class="art-frame">
-          <div class="hero-illustration" role="presentation">
-            <div class="signal-grid" aria-hidden="true">
-              <span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span>
-              <span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span>
-              <span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span><span class="sig-cell"></span>
-            </div>
-            <div class="signal-wave" aria-hidden="true">
-              <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
-              <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
-              <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
-            </div>
-            <div class="signal-core" aria-hidden="true"></div>
-          </div>
-          <p class="art-caption">Signal Array // No visual archive assets loaded</p>
-        </div>
-        <div class="art-strip">
-          <div class="art-mini">
-            <div class="art-thumb" aria-hidden="true"></div>
-            <p>Audio Channel A</p>
-          </div>
-          <div class="art-mini">
-            <div class="art-thumb" aria-hidden="true"></div>
-            <p>Audio Channel B</p>
-          </div>
-        </div>
-      </aside>
-    </div>
-  </section>
-
-  <main>
-    <section class="world section reveal tilt" id="world">
-      <span class="section-corner tl" aria-hidden="true"></span>
-      <span class="section-corner br" aria-hidden="true"></span>
-      <span class="section-scan" aria-hidden="true"></span>
-      <h2><span class="h2-rule" aria-hidden="true"></span>The World</h2>
-      <p>This is a survival server where power is earned and lost. Major events permanently affect the world. Nothing resets.</p>
-    </section>
-
-    <section class="state section reveal tilt" id="state">
-      <span class="section-corner tl" aria-hidden="true"></span>
-      <span class="section-corner br" aria-hidden="true"></span>
-      <span class="section-scan" aria-hidden="true"></span>
-      <h2><span class="h2-rule" aria-hidden="true"></span>Current State of the World</h2>
-      <div class="state-panel">
-        <p class="state-row state-row--stability"><span class="state-key"><span class="state-dot" aria-hidden="true"></span>World Stability</span><strong id="worldStability">81%</strong></p>
-        <p class="state-row state-row--undead"><span class="state-key"><span class="state-dot" aria-hidden="true"></span>Undead Activity</span><strong id="undeadActivity">Low</strong></p>
-        <p class="state-row state-row--artifact"><span class="state-key"><span class="state-dot" aria-hidden="true"></span>Artifact Energy</span><strong id="artifactEnergy">Increasing</strong></p>
-      </div>
-      <div class="stability-meter" aria-label="World stability meter">
-        <div class="stability-segments" id="stabilityBar"></div>
-      </div>
-      <p class="state-note">Countdown to event start (America/Chicago): <strong id="eventCountdown">--d --h --m --s</strong></p>
-      <p class="state-note">World stability decreases until 0% on Sunday, March 1, 2026 at 6:00 PM CT.</p>
-      <p class="state-note">Drain Rate: <strong id="stabilityRate">--/hr</strong></p>
-      <div class="telemetry" id="telemetry">
-        <span class="telemetry-label">Live Telemetry</span>
-        <p id="telemetryText">Calibrating world diagnostics...</p>
-      </div>
-    </section>
-
-    <section class="artifact section reveal" id="artifact">
-      <span class="section-corner tl" aria-hidden="true"></span>
-      <span class="section-corner br" aria-hidden="true"></span>
-      <span class="section-scan" aria-hidden="true"></span>
-      <div class="artifact-card tilt" id="artifactCard">
-        <h2><span class="h2-rule" aria-hidden="true"></span>Containment Protocol</h2>
-        <p class="excerpt">The artifact archive is restricted. Unauthorized visual access is blocked by faction order.</p>
-        <button class="btn btn-primary small" id="revealArtifactBtn" type="button"><span class="btn-text">Press to Reveal</span><span class="btn-arrow" aria-hidden="true">-></span></button>
-
-        <div class="containment-panel" id="containmentPanel" hidden>
-          <h3>The Containment Notice</h3>
-          <p>The artifact remains sealed.</p>
-          <p>Visual documentation is restricted.</p>
-          <p>Access requires ascension.</p>
+      <div class="marquee" aria-live="polite">
+        <div class="marquee-track">
+          <span class="marquee-blue">WELCOME TO PARADOX SMP</span>
+          <span class="marquee-red">PERMANENT WORLD ONLINE</span>
+          <span class="marquee-yellow">CUSTOM ITEMS ACTIVE</span>
+          <span class="marquee-green">PLAYERBASE ONLINE NOW</span>
+          <span class="marquee-blue">JAVA 1.21.X</span>
+          <span class="marquee-red">TERRITORY CHANGES HANDS</span>
+          <span class="marquee-yellow">DISCORD OPEN NOW</span>
+          <span class="marquee-green">LONG TERM WORLD</span>
+          <span class="marquee-blue">WELCOME TO PARADOX SMP</span>
+          <span class="marquee-red">PERMANENT WORLD ONLINE</span>
+          <span class="marquee-yellow">CUSTOM ITEMS ACTIVE</span>
+          <span class="marquee-green">PLAYERBASE ONLINE NOW</span>
         </div>
       </div>
     </section>
 
-    <section class="events section reveal" id="events">
-      <span class="section-corner tl" aria-hidden="true"></span>
-      <span class="section-corner br" aria-hidden="true"></span>
-      <span class="section-scan" aria-hidden="true"></span>
-      <h2><span class="h2-rule" aria-hidden="true"></span>Events</h2>
-      <div class="event-feed">
-        <article class="panel event-panel tilt">
-          <p class="event-type">Necromancer Event</p>
-          <h3 class="event-title">?</h3>
-          <p class="line-item">Status: Pending Trigger</p>
-          <p class="line-item">Reward Tier: Unknown</p>
-          <p class="line-item">Recovered Fragments: <span id="archiveCount">0</span>/5</p>
-          <div class="event-actions">
-            <button class="btn btn-ghost small" id="eventMoreInfoBtn" type="button"><span class="btn-text">More Info</span><span class="btn-arrow" aria-hidden="true">-></span></button>
-            <div class="necro-sigil" id="necroSigil" aria-hidden="true"></div>
-          </div>
-          <div class="zombie-error-panel" id="zombieErrorPanel" hidden>
-            <p class="zombie-code">NECRO-ARCHIVE ERROR [13]</p>
-            <h3>Unauthorized Necromantic Access</h3>
-            <p>Ritual logs are corrupted.</p>
-            <p>Entity signatures detected in sealed records.</p>
-          </div>
-        </article>
+    <header class="window-shell toolbar-window">
+      <div class="title-bar">
+        <span>PARADOX_SMP_CONTROL_PANEL.EXE</span>
+        <span id="toolbarClock">00:00:00 PM CST</span>
       </div>
-    </section>
+      <div class="window-body toolbar-body">
+        <div class="brand-block">
+          <p class="tiny-label">SURVIVAL SERVER DIRECTORY</p>
+          <h1 class="brand-title">PARADOX SMP</h1>
+        </div>
 
-    <section class="join section reveal" id="join">
-      <span class="section-corner tl" aria-hidden="true"></span>
-      <span class="section-corner br" aria-hidden="true"></span>
-      <span class="section-scan" aria-hidden="true"></span>
-      <h2><span class="h2-rule" aria-hidden="true"></span>Join</h2>
-      <div class="join-grid">
-        <article class="panel tilt">
-          <span class="panel-corner tl" aria-hidden="true"></span>
-          <h3>Server</h3>
-          <p class="line-item">IP: <span id="serverIp">152.70.137.25</span></p>
-          <p class="line-item">Version: Java 1.21.x</p>
-          <button class="btn btn-primary small" id="copyIpBtn" type="button"><span class="btn-text">Copy IP</span><span class="btn-arrow" aria-hidden="true">-></span></button>
-        </article>
-        <article class="panel tilt">
-          <span class="panel-corner tl" aria-hidden="true"></span>
-          <h3>Links</h3>
-          <p><a class="text-link" href="https://discord.gg/2K65RuvzCv" target="_blank" rel="noopener noreferrer">Discord</a></p>
-          <p><a class="text-link" href="https://docs.google.com/document/d/1euIF9QYLFCGGJIUZQxXVLp-jb_vRwG0nl0U4RM62aBU" target="_blank" rel="noopener noreferrer">Rules</a></p>
-        </article>
-        <article class="panel tilt">
-          <span class="panel-corner tl" aria-hidden="true"></span>
-          <h3>Rules (Minimal)</h3>
-          <p class="line-item">No cheats or exploits.</p>
-          <p class="line-item">Respect claims and event zones.</p>
-          <p class="line-item">Actions during events are permanent.</p>
-        </article>
+        <nav class="toolbar-nav" aria-label="Primary">
+          <a href="#overview">Overview</a>
+          <a href="#systems">Systems</a>
+          <a href="#state">State</a>
+          <a href="#join">Join</a>
+        </nav>
+
+        <section class="player-box" aria-label="Music player">
+          <p class="tiny-label">BGM PLAYER</p>
+          <div class="player-controls">
+            <button class="win-button" id="musicToggleBtn" type="button">MUSIC OFF</button>
+            <button class="win-button" id="musicNextBtn" type="button">NEXT TRACK</button>
+          </div>
+          <p class="player-status" id="musicStatus">READY: INFINITE AMETHYST / OTHERSIDE / PIGSTEP / MICE ON VENUS / CREATOR</p>
+        </section>
       </div>
-    </section>
-  </main>
+    </header>
 
-  <footer class="reveal">
-    <div class="footer-inner">
-      <span class="footer-rule" aria-hidden="true"></span>
-      <p><span class="footer-tag" aria-hidden="true">[BROADCAST]</span> Paradox SMP - Faction Broadcast <span class="footer-tag" aria-hidden="true">[END]</span></p>
-      <span class="footer-rule" aria-hidden="true"></span>
-    </div>
-  </footer>
-
-  <section class="ai-hoshino-page" id="aiHoshinoPage" hidden>
-    <div class="ai-fan-shell">
-      <header class="ai-fan-hero">
-        <div class="ai-fan-hero-copy">
-          <p class="ai-fan-kicker">Ai Hoshino Fan Page</p>
-          <h1 class="ai-fan-title">Ai Hoshino <span class="ai-title-star" aria-hidden="true">✦</span></h1>
-          <p class="ai-fan-tagline">The brightest star in the night sky, streaming live forever.</p>
-          <p class="ai-fan-rank" id="aiFanRankDisplay">Rank: Casual Fan ✦</p>
-          <p class="ai-fan-rank-note" id="aiFanRankNote">Build rank by cheering, voting, and sharing favorite moments.</p>
-          <div class="ai-hero-badges" aria-label="Ai fan status badges">
-            <span>LIVE IDOL BROADCAST</span>
-            <span>B-KOMACHI CENTER</span>
-            <span>SPOILER-SAFE SPACE</span>
-          </div>
-          <p class="ai-fan-blurb">Ai Hoshino is the face of modern idol mystique in <em>Oshi no Ko</em>: glittering stage confidence, emotional duality, and one of the most discussed character legacies in recent anime/manga fandom.</p>
-          <div class="ai-fan-quicklinks">
-            <a href="#aiBio">Bio</a>
-            <a href="#aiGallery">Gallery</a>
-            <a href="#aiQuotes">Quotes</a>
-            <a href="#aiSongs">Songs</a>
-            <a href="#aiFanStuff">Fan Zone</a>
-          </div>
-          <div class="ai-fan-toplinks">
-            <a href="https://oshinoko.fandom.com/wiki/Ai_Hoshino" target="_blank" rel="noopener noreferrer">Official Wiki Page</a>
-            <a href="https://open.spotify.com/playlist/7g6wIWufZJQhahMcporKgw" target="_blank" rel="noopener noreferrer">Spotify Playlist</a>
-            <button id="aiThemeModeBtn" type="button">Mode: Idol Stage</button>
-          </div>
+    <main id="content">
+      <section class="window-shell hero-window">
+        <div class="title-bar">
+          <span>PARADOX_HOME.HTML</span>
+          <span>UPDATED LAYOUT</span>
         </div>
-        <div class="ai-fan-hero-art">
-          <div class="ai-fan-hero-banner" role="img" aria-label="Ai Hoshino styled stage banner">
-            <div class="ai-stage-beams" aria-hidden="true"><span></span><span></span><span></span></div>
-            <div class="ai-stage-stars" aria-hidden="true"></div>
-            <figure class="ai-hero-card">
-              <img src="https://static.wikia.nocookie.net/oshi_no_ko/images/5/57/Ai_Hoshino_Anime.png/revision/latest?cb=20221211122701" alt="Ai Hoshino official anime visual" class="ai-hero-img" />
-              <figcaption>B-Komachi Center Card // Idol Broadcast Edition</figcaption>
-            </figure>
-            <div class="ai-stage-crowd" aria-hidden="true"></div>
-            <p class="ai-stage-caption">LIVE FEED: B-Komachi Center Broadcast</p>
-          </div>
-          <div class="ai-duality-panel">
-            <article>
-              <h3>Idol Persona</h3>
-              <p>Perfect smile. Perfect timing. Perfect spotlight.</p>
-            </article>
-            <article>
-              <h3>Hidden Reality</h3>
-              <p>When the lights cut out, the emotional cost stays on stage.</p>
-            </article>
-          </div>
-        </div>
-      </header>
-
-      <section class="ai-fan-section tone-idol" id="aiBio">
-        <p class="ai-section-tag">IDOL PROFILE</p>
-        <h2>Bio / Profile + Connections</h2>
-        <div class="ai-fan-grid two">
-          <article class="ai-fan-card">
-            <h3>Basics</h3>
-            <ul>
-              <li>Name: Ai Hoshino</li>
-              <li>Series: Oshi no Ko</li>
-              <li>Occupation: Idol and center performer</li>
-              <li>Agency: Strawberry Productions</li>
-              <li>Group: B-Komachi (original generation)</li>
-              <li>Vibe: magnetic, theatrical, guarded, unreadable</li>
-              <li>Theme Core: performance versus truth</li>
-            </ul>
-            <p class="ai-ref">Who she is on stage and who she is in private are intentionally in conflict.</p>
-          </article>
-          <article class="ai-fan-card">
-            <h3>Timeline + Relationships</h3>
-            <ul>
-              <li>Teen debut and fast rise into national attention.</li>
-              <li>16-star showcase era: fanbase expansion and media saturation.</li>
-              <li>B-Komachi center role becomes her public identity.</li>
-              <li>Secret-protection period: high-performance scheduling and pressure.</li>
-              <li>Agency strategy, fan expectations, and personal secrecy collide.</li>
-              <li>Her legacy drives multiple character arcs long after Episode 1.</li>
-            </ul>
-            <p class="ai-warning">Spoiler warning: relationship details can include major plot turns.</p>
-            <details class="ai-spoiler">
-              <summary>Click To Reveal Relationship + Timeline Spoilers</summary>
-              <ul>
-                <li>Family revelations become one of the most important shocks in the series.</li>
-                <li>Her final arc defines motivations for several central characters.</li>
-                <li>The idol-fan myth and private reality split is the emotional spine of her story.</li>
-              </ul>
-            </details>
-          </article>
-        </div>
-      </section>
-
-      <section class="ai-fan-section tone-stage" id="aiQuotes">
-        <p class="ai-section-tag">ICONIC LINES</p>
-        <h2>Quotes + Iconic Lines</h2>
-        <article class="ai-fan-card ai-cinematic-quote">
-          <p class="ai-cine-kicker">EMOTIONAL ANCHOR</p>
-          <p class="ai-cine-line">"Lies are the most exquisite form of love."</p>
-          <p class="ai-ref">Reference: Episode 1 theme-defining line.</p>
-        </article>
-        <div class="ai-fan-grid four">
-          <article class="ai-fan-card">
-            <h3>Funny</h3>
-            <p>"Perfect smile now, panic later."</p>
-            <p class="ai-ref">Fan shorthand for her playful chaos.</p>
-          </article>
-          <article class="ai-fan-card">
-            <h3>Heartbreaking</h3>
-            <p>"I wanted to love and be loved for real."</p>
-            <p class="ai-ref">Private truth under idol performance.</p>
-          </article>
-          <article class="ai-fan-card">
-            <h3>Idol-Mode</h3>
-            <p>"I'll be your brightest star."</p>
-            <p class="ai-ref">Concert-facing promise energy.</p>
-          </article>
-          <article class="ai-fan-card">
-            <h3>Ai Being Ai</h3>
-            <p>"Cute first. Honest maybe later."</p>
-            <p class="ai-ref">Duality in one sentence.</p>
-          </article>
-        </div>
-        <article class="ai-fan-card ai-quote-machine">
-          <h3>Quote Shuffle</h3>
-          <p id="aiQuoteDisplay">Tap for a random Ai mood line.</p>
-          <button id="aiQuoteShuffleBtn" type="button">Cheer for New Quote ✦</button>
-        </article>
-        <article class="ai-fan-card ai-idol-desk">
-          <h3>Idol Desk</h3>
-          <p id="aiDailyVibe">Tonight's vibe: pink spotlight with soft chaos.</p>
-          <button id="aiVibeSpinBtn" type="button">Spin Daily Vibe ✧</button>
-          <div class="ai-cheer-meter" aria-label="Cheer meter">
-            <span id="aiCheerFill"></span>
-          </div>
-          <p id="aiCheerLabel" class="ai-note">Cheer Meter: 0%</p>
-        </article>
-        <blockquote class="ai-quote-pullout">"What happens when the spotlight turns off?"</blockquote>
-      </section>
-
-      <section class="ai-fan-section tone-idol" id="aiGallery">
-        <p class="ai-section-tag">VISUAL ARCHIVE</p>
-        <h2>Gallery</h2>
-        <div class="ai-fan-grid two">
-          <article class="ai-fan-card">
-            <h3>Official Art</h3>
-            <ul class="ai-credit-list">
-              <li>Primary source: <a href="https://ichigoproduction.com/" target="_blank" rel="noopener noreferrer">ichigoproduction.com</a></li>
-              <li>Character index: <a href="https://oshinoko.fandom.com/wiki/Ai_Hoshino" target="_blank" rel="noopener noreferrer">Ai Wiki Page</a></li>
-              <li>Official visuals only. All art is credited. No exceptions.</li>
-            </ul>
-          </article>
-          <article class="ai-fan-card">
-            <h3>Fanart</h3>
-            <ul class="ai-credit-list">
-              <li>Opt-in fanart only with direct source link.</li>
-              <li>Artist handle + original post link required.</li>
-              <li>Removal policy: immediate takedown on creator request.</li>
-              <li>Status: open for first featured submissions.</li>
-            </ul>
-          </article>
-        </div>
-        <div class="ai-fan-grid two">
-          <article class="ai-fan-card">
-            <h3>Official Visual Picks</h3>
-            <div class="ai-gallery-real">
-              <figure>
-                <img src="https://static.wikia.nocookie.net/oshi_no_ko/images/5/57/Ai_Hoshino_Anime.png/revision/latest?cb=20221211122701" alt="Ai Hoshino anime full-body visual" loading="lazy" />
-                <figcaption>Anime Visual</figcaption>
-              </figure>
-              <figure>
-                <img src="https://static.wikia.nocookie.net/oshi_no_ko/images/a/a5/Ai_Hoshino_Profile.png/revision/latest?cb=20250311130440" alt="Ai Hoshino profile visual" loading="lazy" />
-                <figcaption>Profile Illustration</figcaption>
-              </figure>
-              <figure>
-                <img src="https://static.wikia.nocookie.net/oshi_no_ko/images/8/8a/Ai_Hoshino_Live_Action.png/revision/latest?cb=20241124082144" alt="Ai Hoshino live-action visual" loading="lazy" />
-                <figcaption>Live-Action Visual</figcaption>
-              </figure>
+        <div class="window-body hero-grid">
+          <div class="hero-copy">
+            <div class="badge-row">
+              <span class="badge badge-hot">NEW!</span>
+              <span class="badge" id="heroVersionBadge">JAVA 1.21.X</span>
+              <span class="badge">PERSISTENT MAP</span>
             </div>
-          </article>
-          <article class="ai-fan-card">
-            <h3>Fan Feature Queue</h3>
-            <div class="ai-gallery-strip">
-              <span>Weekly spotlight slot #1: awaiting artist approval</span>
-              <span>Weekly spotlight slot #2: awaiting artist approval</span>
-              <span>Weekly spotlight slot #3: awaiting artist approval</span>
+
+            <p class="tiny-label">PLAYER DRIVEN / LONG TERM / NO DISPOSABLE SEASONS</p>
+            <h2 class="hero-title rainbow-text">POWER STAYS ON THE MAP</h2>
+            <p class="hero-summary">
+              Paradox SMP is a survival server where builds remain, politics stay visible,
+              and every push for control leaves something behind. Custom items add extra weight
+              to progression, and the active playerbase keeps the world moving.
+            </p>
+
+            <div class="button-row">
+              <button class="win-button win-button-primary" id="copyIpHeroBtn" type="button">COPY SERVER IP</button>
+              <a class="win-button win-button-primary" href="https://discord.gg/2K65RuvzCv" target="_blank" rel="noopener noreferrer">JOIN DISCORD</a>
+              <a class="win-button" href="#join">OPEN SERVER DATA</a>
             </div>
-          </article>
-        </div>
-      </section>
+          </div>
 
-      <section class="ai-fan-section tone-truth" id="aiSongs">
-        <p class="ai-section-tag">MUSIC + STORY GUIDE</p>
-        <h2>Performances / Guide / Updates</h2>
-        <div class="ai-fan-grid two">
-          <article class="ai-fan-card">
-            <h3>Songs + Performances</h3>
-            <p>Spotify playlist: <a href="https://open.spotify.com/playlist/7g6wIWufZJQhahMcporKgw" target="_blank" rel="noopener noreferrer">Ai Hoshino Playlist</a></p>
-            <ul>
-              <li>Official uploads only (publisher/studio channels).</li>
-              <li>Lyrics policy: short snippets only, never full reposts.</li>
-              <li>Performance tone map: charm, control, then emotional rupture.</li>
-            </ul>
-            <h3>Favorite Performances</h3>
-            <ul class="ai-perf-list">
-              <li><button class="ai-time-btn" data-time="42">Episode 1 Stage Intro (00:42)</button></li>
-              <li><button class="ai-time-btn" data-time="86">B-Komachi Center Burst (01:26)</button></li>
-              <li><button class="ai-time-btn" data-time="134">Final Smile Beat (02:14)</button></li>
-            </ul>
-            <p id="aiPerfReadout" class="ai-note">Support a stage moment to pin your favorite.</p>
-          </article>
-          <article class="ai-fan-card">
-            <h3>Episode / Chapter Guide</h3>
-            <ul>
-              <li><strong>Episode 1:</strong> full setup of image, truth, and legacy.</li>
-              <li><strong>Later anime episodes:</strong> callbacks and perspective rebuilds.</li>
-              <li><strong>Manga early arcs:</strong> characterization foundation and myth-making.</li>
-              <li><strong>Manga later arcs:</strong> deeper consequences through other POVs.</li>
-              <li><strong>Spoiler-safe summary:</strong> Ai remains the emotional axis even off-screen.</li>
-            </ul>
-            <details class="ai-spoiler">
-              <summary>Click To Reveal Guide Spoilers</summary>
-              <p>Major twists tie directly to her hidden history, private relationships, and final-day consequences.</p>
-            </details>
-            <h3>News / Updates</h3>
-            <ul>
-              <li><a href="https://ichigoproduction.com/" target="_blank" rel="noopener noreferrer">Official Anime Website / Announcements</a></li>
-              <li><a href="https://oshinoko.fandom.com/wiki/Ai_Hoshino" target="_blank" rel="noopener noreferrer">Ai Wiki Updates</a></li>
-              <li><a href="https://www.amiami.com/eng/search/list/?s_keywords=oshi%20no%20ko%20ai" target="_blank" rel="noopener noreferrer">Merch Watch (AmiAmi Search)</a></li>
-            </ul>
-            <h3>Tour + Discography (Fan Lore)</h3>
-            <ul>
-              <li><strong>Tour Set:</strong> Night Spark Arc, Neon Promise, Starlight Confession</li>
-              <li><strong>Single:</strong> "Shine More" (Idol-mode anthem)</li>
-              <li><strong>Single:</strong> "Glass Smile" (duality ballad)</li>
-              <li><strong>Set Finale:</strong> "STAR T RAIN" center-stage version</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="ai-fan-section tone-idol" id="aiAesthetic">
-        <p class="ai-section-tag">AESTHETIC CORNER</p>
-        <h2>Ai-Core Design Resources</h2>
-        <div class="ai-fan-grid two">
-          <article class="ai-fan-card">
-            <h3>Color + Look</h3>
-            <div class="ai-palette">
-              <span style="--sw:#ff4fa3"></span>
-              <span style="--sw:#ffd8ef"></span>
-              <span style="--sw:#1b0033"></span>
-              <span style="--sw:#09040f"></span>
-            </div>
-            <p>Primary direction: hot pink, pale glow, stage violet, backstage black.</p>
-            <ul>
-              <li>Wallpaper baseline: 9:16 (1179x2556)</li>
-              <li>Lockscreen copy style: short line + one star glyph</li>
-              <li>Icon direction: star burst, stage lights, mic silhouette</li>
-            </ul>
-          </article>
-          <article class="ai-fan-card">
-            <h3>Ai-Core Pack Notes</h3>
-            <ul>
-              <li>Typography split: dramatic display + clean readable body.</li>
-              <li>Stage mode resources: glow overlays, sparkle masks, banner gradients.</li>
-              <li>Hidden mode resources: grain texture, low-sat overlays, red undertones.</li>
-              <li>Attribution rule: credit creators in-line and in footer link-outs.</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="ai-fan-section tone-truth" id="aiFanStuff">
-        <p class="ai-section-tag">FAN ZONE</p>
-        <h2>Theories / Submissions / Guestbook</h2>
-        <div class="ai-fan-grid two">
-          <article class="ai-fan-card">
-            <h3>Fan Theories (Labeled)</h3>
-            <ul>
-              <li><strong>Theory:</strong> her public persona was a carefully built shield, not just branding.</li>
-              <li><strong>Theory:</strong> the story's central conflict is inherited identity, not revenge alone.</li>
-              <li><strong>Theory:</strong> Ai's final emotional shift reframes the meaning of "idol love."</li>
-            </ul>
-            <h3>Headcanons</h3>
-            <ul>
-              <li>She rehearsed smiles in mirror lighting before every major appearance.</li>
-              <li>She tracked fan letters by mood and kept the most personal ones private.</li>
-              <li>Her off-stage playlist leaned softer and slower than her idol image implied.</li>
-            </ul>
-            <h3>Fan Milestones</h3>
-            <ul id="aiMilestoneList" class="ai-milestone-list">
-              <li>Cheer 5 times to unlock Dedicated Supporter.</li>
-              <li>Cheer 18 times to unlock Idol Devotee.</li>
-              <li>Cheer 32 times to unlock True Star Follower.</li>
-            </ul>
-            <details class="ai-mini-poll">
-              <summary>Support Ai ✦ Pick a favorite mode</summary>
-              <div class="ai-poll-choices" id="aiPollChoices">
-                <button data-choice="stage">Stage Queen ✦</button>
-                <button data-choice="soft">Soft Smile ✧</button>
-                <button data-choice="chaotic">Chaotic Gremlin ☆</button>
-                <button data-choice="mystery">Mystery Aura ✦</button>
+          <div class="hero-side">
+            <section class="window-shell mini-window">
+              <div class="title-bar">
+                <span>WORLD_STATUS.DAT</span>
+                <span>READ ONLY</span>
               </div>
-              <p id="aiPollResult" class="ai-note">Vote to save your favorite mode.</p>
-            </details>
-          </article>
-          <article class="ai-fan-card" id="aiSubmissions">
-            <h3>Guestbook + Submissions</h3>
-            <p class="ai-warning">Moderation Rules: be respectful, no harassment, no untagged spoilers.</p>
-            <p class="ai-prompt">Leave your favorite Ai moment:</p>
-            <form id="aiGuestbookForm" class="ai-guest-form">
-              <input type="text" id="aiGuestName" placeholder="Name" required />
-              <textarea id="aiGuestMessage" rows="3" placeholder="Your favorite Ai moment..." required></textarea>
-              <label class="ai-check"><input type="checkbox" id="aiNoSpoilerCheck" required /> I confirm this message is spoiler-safe.</label>
-              <button type="submit">Send Love Message</button>
-            </form>
-            <ul id="aiGuestbookList" class="ai-guest-list"></ul>
-            <form class="ai-submit-form" id="aiSubmissionForm">
-              <input type="text" id="aiSubmitName" placeholder="Name / Handle" />
-              <input type="url" id="aiSubmitLink" placeholder="Post / Portfolio Link" />
-              <textarea id="aiSubmitText" rows="3" placeholder="Art, edit, essay, timeline, or playlist write-up"></textarea>
-              <button type="submit">Save Love Message Draft</button>
-            </form>
-            <p class="ai-note">Submission checklist: source links, permission status, spoiler tags.</p>
-          </article>
+              <div class="window-body inset-body">
+                <div class="status-table" role="table" aria-label="World status table">
+                  <div class="status-row" role="row">
+                    <span role="cell">MAP POLICY</span>
+                    <strong role="cell">PERMANENT</strong>
+                  </div>
+                  <div class="status-row" role="row">
+                    <span role="cell">ENTRY</span>
+                    <strong role="cell">OPEN</strong>
+                  </div>
+                  <div class="status-row" role="row">
+                    <span role="cell">CUSTOM GEAR</span>
+                    <strong role="cell">ACTIVE</strong>
+                  </div>
+                  <div class="status-row" role="row">
+                    <span role="cell">PLAYERBASE</span>
+                    <strong id="heroPlayerCount" role="cell">CHECKING...</strong>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="window-shell mini-window">
+              <div class="title-bar">
+                <span>COLOR_TEST.ARR</span>
+                <span>DECORATION</span>
+              </div>
+              <div class="window-body inset-body">
+                <div class="color-grid" aria-hidden="true">
+                  <span class="sq-blue"></span>
+                  <span class="sq-red"></span>
+                  <span class="sq-yellow"></span>
+                  <span class="sq-green"></span>
+                  <span class="sq-blue"></span>
+                  <span class="sq-red"></span>
+                  <span class="sq-yellow"></span>
+                  <span class="sq-green"></span>
+                  <span class="sq-blue"></span>
+                  <span class="sq-red"></span>
+                  <span class="sq-yellow"></span>
+                  <span class="sq-green"></span>
+                </div>
+                <p class="small-note">SIGNAL ARRAY ONLINE. PLAYER SCAN ENABLED.</p>
+              </div>
+            </section>
+          </div>
         </div>
       </section>
-    </div>
-  </section>
 
-  <script src="ai-hoshino-music-config.js"></script>
+      <hr class="groove-rule" />
+
+      <section class="content-grid" id="overview">
+        <article class="window-shell">
+          <div class="title-bar">
+            <span>OVERVIEW.TXT</span>
+            <span>INFO</span>
+          </div>
+          <div class="window-body inset-body">
+            <p>
+              This server is built for players who want a world with memory. Strongholds,
+              roads, rivalries, trade hubs, and ruined pushes remain part of the map
+              instead of getting wiped away every time the mood changes.
+            </p>
+            <ul class="bullet-list">
+              <li>Territory matters because position matters.</li>
+              <li>Trade matters because players create the routes.</li>
+              <li>Builds matter because the world does not forget them.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="window-shell">
+          <div class="title-bar">
+            <span>WORLD_SNAPSHOT.XLS</span>
+            <span>TABLE VIEW</span>
+          </div>
+          <div class="window-body inset-body no-pad">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>FIELD</th>
+                  <th>VALUE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>SERVER NAME</td>
+                  <td>PARADOX SMP</td>
+                </tr>
+                <tr>
+                  <td>VERSION</td>
+                  <td id="overviewVersion">CHECKING...</td>
+                </tr>
+                <tr>
+                  <td>WORLD TYPE</td>
+                  <td>LONG TERM SURVIVAL</td>
+                </tr>
+                <tr>
+                  <td>CUSTOM ITEMS</td>
+                  <td>ENABLED</td>
+                </tr>
+                <tr>
+                  <td>PLAYER STATUS</td>
+                  <td id="overviewPlayers">CHECKING...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <hr class="groove-rule" />
+
+      <section class="window-shell" id="systems">
+        <div class="title-bar">
+          <span>SERVER_SYSTEMS.SYS</span>
+          <span>MAIN PANEL</span>
+        </div>
+        <div class="window-body no-pad">
+          <div class="systems-table systems-table--three">
+            <article class="system-cell">
+              <h3>Territory</h3>
+              <p>Good land shapes how the world develops. Roads, borders, and base placement all matter.</p>
+            </article>
+            <article class="system-cell">
+              <h3>Trade</h3>
+              <p>When routes stay safe, markets grow. When they fail, players feel it fast.</p>
+            </article>
+            <article class="system-cell">
+              <h3>Conflict</h3>
+              <p>Pressure comes from players, not from scripted spectacle. That keeps outcomes cleaner and more real.</p>
+            </article>
+            <article class="system-cell">
+              <h3>Custom Items</h3>
+              <p>Progression is not purely vanilla. Custom gear gives players extra goals, flex pieces, and reasons to contest rare advantages.</p>
+            </article>
+            <article class="system-cell">
+              <h3>Active Playerbase</h3>
+              <p>The server is strongest when people are actually moving through it. Live status is now pulled from the server instead of fake counters.</p>
+            </article>
+            <article class="system-cell">
+              <h3>Legacy</h3>
+              <p>Winning is visible. Losing is visible. That is what gives the world weight.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <hr class="groove-rule" />
+
+      <section class="content-grid" id="state">
+        <article class="window-shell">
+          <div class="title-bar">
+            <span>LIVE_STATUS.API</span>
+            <span id="statusPingLabel">CHECKING</span>
+          </div>
+          <div class="window-body inset-body">
+            <div class="server-live-card" aria-label="Live server status">
+              <p class="tiny-label">CURRENT PLAYERS</p>
+              <strong class="server-live-count" id="livePlayerCount">-- / --</strong>
+              <p class="server-live-subline" id="liveVersion">VERSION CHECK PENDING</p>
+              <p class="server-live-subline" id="liveDescription">QUERYING SERVER STATUS...</p>
+            </div>
+
+            <div class="status-table" role="table" aria-label="Live server readout">
+              <div class="status-row" role="row">
+                <span role="cell">SERVER IP</span>
+                <strong role="cell">152.70.137.25</strong>
+              </div>
+              <div class="status-row" role="row">
+                <span role="cell">MAX SLOTS</span>
+                <strong id="liveMaxPlayers" role="cell">--</strong>
+              </div>
+              <div class="status-row" role="row">
+                <span role="cell">LAST REFRESH</span>
+                <strong id="lastRefresh" role="cell">WAITING</strong>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="window-shell">
+          <div class="title-bar">
+            <span>ACTIVE_PLAYERBASE.LST</span>
+            <span id="rosterCountLabel">0 PLAYERS</span>
+          </div>
+          <div class="window-body inset-body">
+            <ul class="player-roster" id="playerRoster">
+              <li>Checking current players...</li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      <section class="construction-zone" id="join">
+        <div class="construction-banner">UNDER CONSTRUCTION - OPEN FOR PLAYERS - PARADOX SMP - UNDER CONSTRUCTION</div>
+        <div class="window-shell construction-window">
+          <div class="title-bar">
+            <span>JOIN_INFO.TXT</span>
+            <span>FINAL PANEL</span>
+          </div>
+          <div class="window-body construction-body">
+            <div class="join-panel">
+              <p class="tiny-label">SERVER IP</p>
+              <p class="join-ip" id="serverIp">152.70.137.25</p>
+              <div class="button-row">
+                <button class="win-button win-button-primary" id="copyIpJoinBtn" type="button">COPY IP</button>
+                <a class="win-button win-button-primary" href="https://discord.gg/2K65RuvzCv" target="_blank" rel="noopener noreferrer">OPEN DISCORD</a>
+                <a class="win-button" href="https://docs.google.com/document/d/1euIF9QYLFCGGJIUZQxXVLp-jb_vRwG0nl0U4RM62aBU" target="_blank" rel="noopener noreferrer">READ RULES</a>
+              </div>
+            </div>
+
+            <div class="join-panel">
+              <p class="tiny-label">RULE PREVIEW</p>
+              <ul class="bullet-list">
+                <li>No cheating, duping, or exploit abuse.</li>
+                <li>Keep conflict in-game instead of turning it into harassment.</li>
+                <li>Staff decisions stand when intervention is needed.</li>
+                <li>Read the full rules document before joining.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="window-shell footer-window">
+      <div class="title-bar">
+        <span>END_OF_FILE.TXT</span>
+        <span>PARADOX SMP</span>
+      </div>
+      <div class="window-body footer-body">
+        <p>Paradox SMP is now one page, one style, and one server identity.</p>
+        <p><a href="https://discord.gg/2K65RuvzCv" target="_blank" rel="noopener noreferrer">ENTER DISCORD</a></p>
+      </div>
+    </footer>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
+
